@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday, Maa!</title>
+    <title>For You, Maa ❤️</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,28 +11,95 @@
 </head>
 <body>
 
-    <main class="reveal-container">
-    <div class="message-box">
-        <p class="quote">
-            "This is how you clean my doubts away every time I am in confusion. 
-            Thank you for such beautiful guidance, <span class="maa-signature">Maa</span>."
-        </p>
-        
-        <p id="interactive-story" class="story-paragraph">
-            I don't listen you sometimes. Sometimes I do even hurt you. Sometimes you hurt me too 😊. 
-            But this bond has stayed intact, no matter what. I do realize how mature and practical 
-            are your suggestions every time but I would be continuing testing our bond again and again. 
-            Probably this makes us what we are. Today I am celebrating this bond for its completion 
-            of another year. Hoping it would last until my last breath.
-        </p>
+    <div id="sky-environment">
+        <div id="dynamic-stars-layer"></div>
     </div>
+
+    <canvas id="bg-cloud-canvas"></canvas>
+
+    <main id="app-view-container">
+
+        <div id="view-section-1" class="view-screen">
+            <div class="content-viewport-capsule">
+                <div class="message-box box-page1">
+                    <p class="quote">
+                        "This is how you clean my doubts away every time I am in confusion. 
+                        Thank you for such beautiful guidance, <span class="maa-signature">Maa</span>."
+                    </p>
+                    <p id="interactive-story-1" class="story-paragraph" data-paragraph-type="intro">
+                        I don't listen you sometimes. Sometimes I do even hurt you. Sometimes you hurt me too 😊. 
+                        But this bond has stayed intact, no matter what. I do realize how practical 
+                        are your suggestions every time but I would be continuing testing our bond again and again. 
+                        Probably this makes us what we are. Today I am celebrating this bond for its completion 
+                        of another year. Hoping it would last until my last breath.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-section-2" class="view-screen hidden-layer display-none">
+            <div class="drawing-layout-stack">
+                <p class="drawing-instruction-text">
+                    Draw a heart on my hand... Be careful, this will calculate your love for me ❤️
+                </p>
+                <div class="canvas-wrapper">
+                    <svg id="hand-outline" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,95 C43,82 28,72 23,58 C18,46 19,35 23,25 C25,20 30,16 34,25 C36,30 36,38 36,45 C36,30 38,15 41,10 C43,5 47,5 48,12 C49,20 49,35 49,45 C49,32 51,18 53,11 C55,6 59,6 60,13 C61,22 60,35 60,46 C60,36 63,22 66,17 C69,13 72,16 72,22 C72,34 68,48 69,58 C71,69 60,83 50,95 Z" 
+                              fill="none" stroke="#e0b0b0" stroke-width="0.7" stroke-opacity="0.25" stroke-dasharray="2,2"/>
+                    </svg>
+                    <canvas id="draw-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-section-3" class="view-screen hidden-layer display-none">
+            <div class="content-viewport-capsule">
+                <div id="memory-card" class="message-box box-mehndi">
+                    <h1 class="memory-title">My favorite thing with U</h1>
+                    <p id="mehndi-story" class="story-paragraph" data-paragraph-type="mehndi">
+                        I do love making mehndi on your hands. No matter how much effort does it take, its completion and your complements never disheartens me ❤️.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-section-4" class="view-screen hidden-layer display-none">
+            <div class="gallery-viewport-capsule">
+                <h1 class="gallery-title-header">The last Mehndi session</h1>
+                <div class="photos-flex-grid">
+                    <div class="celestial-photo-frame">
+                        <div class="photo-image-placeholder">
+                            <img src="photo1.jpg" alt="Memory 1" onerror="this.style.display='none';">
+                            <span class="fallback-frame-sparkle">✨</span>
+                        </div>
+                        <p class="photo-caption-text">Before</p>
+                    </div>
+                    <div class="celestial-photo-frame">
+                        <div class="photo-image-placeholder">
+                            <img src="photo2.jpg" alt="Memory 2" onerror="this.style.display='none';">
+                            <span class="fallback-frame-sparkle">❤️</span>
+                        </div>
+                        <p class="photo-caption-text">After</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <div id="emoji-popup-overlay" class="emoji-overlay hidden-element">
-        <span class="giant-emoji">🤭</span>
+    <canvas id="fg-cloud-canvas"></canvas>
+
+    <div id="emoji-popup-overlay" class="interaction-overlay hidden-element"><span class="giant-pop-symbol emoji-pop">😊</span></div>
+    
+    <div id="custom-alert-overlay" class="interaction-overlay hidden-element">
+        <div class="alert-modal-card">
+            <div id="alert-emoji" class="modal-emoji"></div>
+            <div id="alert-text-odia" class="modal-odia-text"></div>
+            <div id="alert-text-score" class="modal-score-text"></div>
+        </div>
     </div>
 
-    <canvas id="flower-canvas"></canvas>
+    <audio id="sargam-audio" src="sargam.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>

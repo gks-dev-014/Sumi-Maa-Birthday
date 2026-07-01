@@ -1,6 +1,3 @@
-/* ==========================================================================
-   1. Reset & Base Styles
-   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -11,14 +8,10 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    background-color: #fff5f5; /* Soft, warm background color */
+    background-color: #010204; 
 }
 
-/* ==========================================================================
-   2. Hidden Message Layer (With Internal Scrollbar)
-   ========================================================================== */
-.reveal-container {
+.view-screen {
     position: absolute;
     top: 0;
     left: 0;
@@ -27,249 +20,294 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    z-index: 1;
+    padding: 2vh 2vw; 
+    z-index: 5; 
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+.hidden-layer { opacity: 0; pointer-events: none; transform: scale(0.96) translateY(15px); }
+.display-none { display: none !important; }
+
+/* ==========================================================================
+   2. Starry Night Backdrop Architecture
+   ========================================================================== */
+#sky-environment {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 35%, #040914 0%, #010204 85%);
+    z-index: 1;
+    overflow: hidden;
+}
+
+.custom-star {
+    position: absolute;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: smoothGlow infinite alternate ease-in-out;
+}
+
+@keyframes smoothGlow {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ==========================================================================
+   3. Combined Content Stack Layouts
+   ========================================================================== */
+.content-viewport-capsule {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 650px;
+    position: relative;
+}
+
+/* ==========================================================================
+   4. Multi-Layer Canvas Layer Stacking Configuration
+   ========================================================================== */
+#bg-cloud-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; 
+    background: transparent;
+    pointer-events: none; 
+}
+
+#fg-cloud-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 12; 
+    background: transparent;
+    transition: z-index 0.1s step-end, opacity 0.5s ease;
+}
+#fg-cloud-canvas.allow-clicks { pointer-events: none; }
+
+/* ==========================================================================
+   5. Glassmorphic Cards (Crystal Clear Content Containment)
+   ========================================================================== */
 .message-box {
     text-align: center;
-    max-width: 700px;
     width: 100%;
-    max-height: 85vh; /* Prevents container from pushing past screen boundaries */
-    padding: 40px;
-    background: rgba(255, 245, 245, 0.4); /* Faint tint backdrop */
-    border-radius: 20px;
-    backdrop-filter: blur(4px);
-    animation: elegantFade 2.5s ease-in-out forwards;
-    pointer-events: auto; /* Forces interactive words to register mouse/touch events */
-    
-    /* Elegant internal scroll handling */
-    overflow-y: auto; 
-    overflow-x: hidden; 
+    max-height: 78vh; 
+    padding: 4.5vh 5vw;
+    background: rgba(3, 7, 18, 0.2); 
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    border-radius: 26px;
+    backdrop-filter: blur(14px);
+    z-index: 3; 
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh; 
 }
 
-/* Custom Scrollbar Styling for a premium look */
-.message-box::-webkit-scrollbar {
-    width: 6px; /* Slim bar */
+.box-page1 { border-color: rgba(255, 255, 255, 0.06); }
+
+.box-mehndi { 
+    border-color: rgba(245, 158, 11, 0.25); 
+    background: rgba(18, 11, 7, 0.35); 
+    box-shadow: 0 30px 70px rgba(217, 119, 6, 0.15), 
+                inset 0 1px 2px rgba(252, 211, 77, 0.15);
 }
 
-.message-box::-webkit-scrollbar-track {
-    background: transparent;
+.quote { 
+    font-family: 'Playfair Display', serif; 
+    font-size: clamp(1.05rem, 1.15rem + 0.4vh, 1.6rem); 
+    font-style: italic; 
+    line-height: 1.5; 
+    color: #f1f5f9; 
+    width: 100%;
+    letter-spacing: 0.3px;
+    text-shadow: 0 0 15px rgba(241, 245, 249, 0.15); 
 }
 
-.message-box::-webkit-scrollbar-thumb {
-    background-color: rgba(214, 51, 132, 0.3); /* Rose pink track slider */
-    border-radius: 10px;
+.maa-signature { 
+    font-family: 'Alex Brush', cursive; 
+    font-size: clamp(2.2rem, 2.4rem + 0.6vh, 3.2rem); 
+    color: #ffb7c5; 
+    display: inline-block; 
+    padding-left: 6px; 
+    text-shadow: 0 0 15px rgba(255, 183, 197, 0.3);
 }
 
-.message-box::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(214, 51, 132, 0.6);
-}
-
-.quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    font-weight: 400;
-    font-style: italic;
-    line-height: 1.8;
-    color: #4a2c3a;
+.memory-title { 
+    font-family: 'Playfair Display', serif; 
+    font-size: clamp(1.3rem, 1.4rem + 0.4vh, 2rem); 
+    font-weight: 600; 
+    color: #fcd34d; 
     letter-spacing: 0.5px;
-    margin-bottom: 35px;
-    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8), 0 4px 20px rgba(214, 51, 132, 0.15); 
+    text-shadow: 0 0 20px rgba(252, 211, 77, 0.25);
 }
 
-.maa-signature {
-    font-family: 'Alex Brush', cursive;
-    font-size: 4rem;
-    font-weight: 400;
-    color: #d63384;
-    display: inline-block;
-    padding-left: 8px;
-    text-shadow: none;
-    vertical-align: middle;
-}
-
-/* ==========================================================================
-   3. Interactive Navigation Elements
-   ========================================================================== */
-.enter-btn {
-    padding: 12px 30px;
-    font-size: 1rem;
-    background-color: #d63384;
-    color: white;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
-    transition: transform 0.2s, opacity 0.5s, background-color 0.2s;
-    margin-top: 10px;
-}
-
-.enter-btn:hover {
-    transform: scale(1.05);
-    background-color: #c22373;
-}
-
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#flower-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    background: transparent;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text y="22" font-size="22">🌸</text></svg>'), auto;
-}
-
-/* ==========================================================================
-   4. Core Document Animations
-   ========================================================================== */
-@keyframes elegantFade {
-    from { 
-        opacity: 0; 
-        transform: translateY(30px);
-        filter: blur(5px);
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0);
-        filter: blur(0);
-    }
-}
-
-/* ==========================================================================
-   5. Interactive Paragraph & Word Zoom Elements
-   ========================================================================== */
-.story-paragraph {
-    font-family: 'Crimson Text', serif;
-    font-size: 1.45rem;
-    line-height: 1.9;
-    color: #4a2c3a;
-    margin: 30px auto;
-    max-width: 620px;
+.story-paragraph { 
+    font-family: 'Crimson Text', serif; 
+    font-size: clamp(0.95rem, 1rem + 0.3vh, 1.35rem); 
+    line-height: 1.6; 
+    color: #cbd5e1; 
+    width: 100%; 
     text-align: center;
-    font-weight: 400;
+    letter-spacing: 0.2px;
 }
 
-.interactive-word {
-    display: inline-block;
+.interactive-word { 
+    display: inline-block; 
+    cursor: pointer; 
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s, text-shadow 0.2s; 
+    padding: 0 1px; 
+}
+.interactive-word:hover, .interactive-word.active-touch { 
+    transform: scale(1.15) translateY(-2px); 
+    font-weight: 600; 
+    color: #fda4af; 
+    text-shadow: 0 0 12px rgba(253, 164, 175, 0.5);
+}
+.box-mehndi .interactive-word:hover, .box-mehndi .interactive-word.active-touch { 
+    color: #fbbf24; 
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
+}
+
+.interactive-symbol { 
+    display: inline-block; 
+    padding: 0 2px; 
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s;
-    padding: 0 3px;
+    transition: transform 0.25s ease;
+}
+/* Trigger effect specifically set to pop up only for photo gallery link actions */
+.interactive-symbol:hover {
+    transform: scale(1.3);
 }
 
-.interactive-word:hover, .interactive-word.active-touch {
-    transform: scale(1.25) translateY(-3px);
-    color: #d63384;
-    font-weight: 600;
-    text-shadow: 0 2px 10px rgba(214, 51, 132, 0.15);
-}
-
-.interactive-emoji {
-    display: inline-block;
-    cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    padding: 0 4px;
-}
-.interactive-emoji:hover, .interactive-emoji.active-touch {
-    transform: scale(1.35);
-}
+.interactive-emoji { display: inline-block; cursor: pointer; transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 0 2px; }
+.interactive-emoji:hover, .interactive-emoji.active-touch { transform: scale(1.25); }
 
 /* ==========================================================================
-   6. Full-Screen Pop-up Overlay Configuration
+   6. Drawing Layer Stacking Layout
    ========================================================================== */
-.emoji-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 245, 245, 0.85);
-    backdrop-filter: blur(8px);
+.drawing-layout-stack { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; width: 100%; }
+.drawing-instruction-text { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 1.15rem + 0.3vh, 1.5rem); font-style: italic; color: #f1f5f9; text-align: center; max-width: 90%; line-height: 1.5; letter-spacing: 0.2px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
+.canvas-wrapper { position: relative; width: min(295px, 78vw); height: min(425px, 75vh); background: radial-gradient(circle at 50% 40%, #ffffff 0%, #f1f5f9 100%); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 32px; box-shadow: 0 25px 55px rgba(255, 255, 255, 0.08), 0 15px 45px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.6); }
+#hand-outline { position: absolute; top: 6%; left: 6%; width: 88%; height: 88%; z-index: 1; pointer-events: none; }
+#draw-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; cursor: crosshair; }
+
+/* ==========================================================================
+   7. HEAVENLY PHOTO GALLERY MODULE CLASSES (NEW)
+   ========================================================================== */
+.gallery-viewport-capsule {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    max-width: 750px;
+    gap: 3.5vh;
+}
+
+.gallery-title-header {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 1.8rem + 0.5vh, 2.5rem);
+    font-weight: 600;
+    color: #fcd34d;
+    text-align: center;
+    letter-spacing: 0.8px;
+    text-shadow: 0 0 20px rgba(252, 211, 77, 0.3);
+}
+
+.images-fallback-hint {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.1rem;
+    color: #94a3b8;
+}
+
+.photos-flex-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4vw;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.celestial-photo-frame {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 14px;
+    border-radius: 20px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+    width: min(280px, 43vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vh;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15), border-color 0.4s;
+}
+.celestial-photo-frame:hover {
+    transform: scale(1.04) translateY(-5px);
+    border-color: rgba(252, 211, 77, 0.4);
+}
+
+.photo-image-placeholder {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: radial-gradient(circle at 50% 50%, #151f32 0%, #0b101d 100%);
+    border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.emoji-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
+.photo-image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.giant-emoji {
-    font-size: 10rem;
-    animation: popAndVibrate 0.5s ease infinite alternate;
+.fallback-frame-sparkle {
+    font-size: 2.2rem;
+    color: rgba(252, 211, 77, 0.4);
+    position: absolute;
+    animation: pulseEmoji 1s ease infinite alternate;
 }
 
-.hidden-element {
-    display: none !important;
-}
-
-@keyframes popAndVibrate {
-    0% { transform: scale(0.8) translate(2px, 1px) rotate(0deg); }
-    10% { transform: scale(1) translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: scale(1.1) translate(-3px, 0px) rotate(1deg); }
-    30% { transform: scale(1.1) translate(0px, 2px) rotate(0deg); }
-    40% { transform: scale(1.1) translate(1px, -1px) rotate(1deg); }
-    50% { transform: scale(1.1) translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: scale(1.1) translate(-3px, 1px) rotate(0deg); }
-    70% { transform: scale(1.1) translate(2px, 1px) rotate(-1deg); }
-    80% { transform: scale(1.1) translate(-1px, -1px) rotate(1deg); }
-    90% { transform: scale(1.1) translate(2px, 2px) rotate(0deg); }
-    100% { transform: scale(1.1) translate(1px, -2px) rotate(-1deg); }
+.photo-caption-text {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(1.05rem, 1.1rem + 0.2vh, 1.4rem);
+    color: #e2e8f0;
+    font-style: italic;
+    text-align: center;
 }
 
 /* ==========================================================================
-   7. Consolidated Responsive Media Breakpoints
+   8. Alert Modals & Overlay Filters
    ========================================================================== */
-@media (max-width: 768px) {
-    .quote {
-        font-size: 1.7rem;
-        line-height: 1.6;
-        margin-bottom: 25px;
-    }
-    .maa-signature {
-        font-size: 3.2rem;
-    }
-    .story-paragraph {
-        font-size: 1.25rem;
-        line-height: 1.8;
-        padding: 0 15px;
-    }
-}
+.interaction-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.interaction-overlay.show { opacity: 1; pointer-events: auto; }
+#emoji-popup-overlay { background: rgba(2, 4, 10, 0.5); backdrop-filter: blur(4px); }
+#custom-alert-overlay { background: rgba(2, 4, 10, 0.8); backdrop-filter: blur(6px); }
 
-@media (max-width: 480px) {
-    .message-box {
-        padding: 25px 15px;
-        max-height: 80vh; /* Drops container down slightly on tiny mobiles for extra safety */
-    }
-    .quote {
-        font-size: 1.3rem;
-        line-height: 1.5;
-        margin-bottom: 20px;
-    }
-    .maa-signature {
-        font-size: 2.5rem;
-    }
-    .story-paragraph {
-        font-size: 1.15rem;
-        line-height: 1.7;
-        margin: 20px auto;
-    }
-    .enter-btn {
-        padding: 10px 24px;
-        font-size: 0.9rem;
-    }
-    .giant-emoji {
-        font-size: 6rem;
-    }
-}
+.alert-modal-card { background: #0f172a; border: 2px solid #ea580c; padding: 3.5vh 4vw; border-radius: 24px; max-width: 380px; width: 88%; text-align: center; box-shadow: 0 35px 75px rgba(0,0,0,0.85); animation: modalPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes modalPopIn { 0% { transform: scale(0.75); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.modal-emoji { font-size: 3.8rem; margin-bottom: 1.5vh; }
+.modal-odia-text { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; color: #f8fafc; line-height: 1.5; margin-bottom: 1vh; }
+.modal-score-text { font-family: 'Crimson Text', serif; font-size: 1.05rem; color: #9ca3af; font-style: italic; }
+
+.giant-pop-symbol { font-size: 8rem; animation: pulseEmoji 0.5s ease infinite alternate; }
+@keyframes pulseEmoji { 0% { transform: scale(0.85); } 100% { transform: scale(1.1); } }
