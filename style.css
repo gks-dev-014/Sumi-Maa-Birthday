@@ -1,0 +1,275 @@
+/* ==========================================================================
+   1. Reset & Base Styles
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff5f5; /* Soft, warm background color */
+}
+
+/* ==========================================================================
+   2. Hidden Message Layer (With Internal Scrollbar)
+   ========================================================================== */
+.reveal-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1;
+}
+
+.message-box {
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh; /* Prevents container from pushing past screen boundaries */
+    padding: 40px;
+    background: rgba(255, 245, 245, 0.4); /* Faint tint backdrop */
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+    animation: elegantFade 2.5s ease-in-out forwards;
+    pointer-events: auto; /* Forces interactive words to register mouse/touch events */
+    
+    /* Elegant internal scroll handling */
+    overflow-y: auto; 
+    overflow-x: hidden; 
+}
+
+/* Custom Scrollbar Styling for a premium look */
+.message-box::-webkit-scrollbar {
+    width: 6px; /* Slim bar */
+}
+
+.message-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.message-box::-webkit-scrollbar-thumb {
+    background-color: rgba(214, 51, 132, 0.3); /* Rose pink track slider */
+    border-radius: 10px;
+}
+
+.message-box::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(214, 51, 132, 0.6);
+}
+
+.quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.8;
+    color: #4a2c3a;
+    letter-spacing: 0.5px;
+    margin-bottom: 35px;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8), 0 4px 20px rgba(214, 51, 132, 0.15); 
+}
+
+.maa-signature {
+    font-family: 'Alex Brush', cursive;
+    font-size: 4rem;
+    font-weight: 400;
+    color: #d63384;
+    display: inline-block;
+    padding-left: 8px;
+    text-shadow: none;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   3. Interactive Navigation Elements
+   ========================================================================== */
+.enter-btn {
+    padding: 12px 30px;
+    font-size: 1rem;
+    background-color: #d63384;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+    transition: transform 0.2s, opacity 0.5s, background-color 0.2s;
+    margin-top: 10px;
+}
+
+.enter-btn:hover {
+    transform: scale(1.05);
+    background-color: #c22373;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#flower-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: transparent;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text y="22" font-size="22">🌸</text></svg>'), auto;
+}
+
+/* ==========================================================================
+   4. Core Document Animations
+   ========================================================================== */
+@keyframes elegantFade {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px);
+        filter: blur(5px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+/* ==========================================================================
+   5. Interactive Paragraph & Word Zoom Elements
+   ========================================================================== */
+.story-paragraph {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.45rem;
+    line-height: 1.9;
+    color: #4a2c3a;
+    margin: 30px auto;
+    max-width: 620px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.interactive-word {
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s;
+    padding: 0 3px;
+}
+
+.interactive-word:hover, .interactive-word.active-touch {
+    transform: scale(1.25) translateY(-3px);
+    color: #d63384;
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(214, 51, 132, 0.15);
+}
+
+.interactive-emoji {
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 0 4px;
+}
+.interactive-emoji:hover, .interactive-emoji.active-touch {
+    transform: scale(1.35);
+}
+
+/* ==========================================================================
+   6. Full-Screen Pop-up Overlay Configuration
+   ========================================================================== */
+.emoji-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 245, 245, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.emoji-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.giant-emoji {
+    font-size: 10rem;
+    animation: popAndVibrate 0.5s ease infinite alternate;
+}
+
+.hidden-element {
+    display: none !important;
+}
+
+@keyframes popAndVibrate {
+    0% { transform: scale(0.8) translate(2px, 1px) rotate(0deg); }
+    10% { transform: scale(1) translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: scale(1.1) translate(-3px, 0px) rotate(1deg); }
+    30% { transform: scale(1.1) translate(0px, 2px) rotate(0deg); }
+    40% { transform: scale(1.1) translate(1px, -1px) rotate(1deg); }
+    50% { transform: scale(1.1) translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: scale(1.1) translate(-3px, 1px) rotate(0deg); }
+    70% { transform: scale(1.1) translate(2px, 1px) rotate(-1deg); }
+    80% { transform: scale(1.1) translate(-1px, -1px) rotate(1deg); }
+    90% { transform: scale(1.1) translate(2px, 2px) rotate(0deg); }
+    100% { transform: scale(1.1) translate(1px, -2px) rotate(-1deg); }
+}
+
+/* ==========================================================================
+   7. Consolidated Responsive Media Breakpoints
+   ========================================================================== */
+@media (max-width: 768px) {
+    .quote {
+        font-size: 1.7rem;
+        line-height: 1.6;
+        margin-bottom: 25px;
+    }
+    .maa-signature {
+        font-size: 3.2rem;
+    }
+    .story-paragraph {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .message-box {
+        padding: 25px 15px;
+        max-height: 80vh; /* Drops container down slightly on tiny mobiles for extra safety */
+    }
+    .quote {
+        font-size: 1.3rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+    .maa-signature {
+        font-size: 2.5rem;
+    }
+    .story-paragraph {
+        font-size: 1.15rem;
+        line-height: 1.7;
+        margin: 20px auto;
+    }
+    .enter-btn {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    .giant-emoji {
+        font-size: 6rem;
+    }
+}
