@@ -113,7 +113,6 @@ function switchAppScene(targetSceneNumber) {
         galleryView.classList.remove('display-none');
         setTimeout(() => galleryView.classList.remove('hidden-layer'), 50);
 
-        // NEW TIMELINE MANAGEMENT ENGINE: Counts 5 seconds precisely before advancing automatically
         setTimeout(() => {
             if (activePageContext === 4) {
                 switchAppScene(5);
@@ -121,7 +120,6 @@ function switchAppScene(targetSceneNumber) {
         }, 5000);
     }
     else if (targetSceneNumber === 5) {
-        // UNPACK MUSIC MODULE: Smoothly slides into view, parses and binds texts into interactive spans
         fgCanvas.style.zIndex = "12";
         fgCanvas.style.opacity = "1";
         initSparseAmbientFlowers();
@@ -357,7 +355,42 @@ function triggerFlowerStormTransition() {
     }, 600);
 }
 
-// Text Parsers & Heart Interceptor Matrix
+// ==========================================================================
+// Immersive Finger-Slide Real-Time Reader Engine (ANDROID HOVER FIX)
+// ==========================================================================
+function clearActiveWordHighlights() {
+    document.querySelectorAll('.interactive-word').forEach(w => w.classList.remove('active-touch'));
+}
+
+function handleFingerSlideAction(e) {
+    if (activePageContext === 2) return; 
+    const t = e.touches[0];
+    
+    fgCanvas.style.pointerEvents = 'none';
+    const hitNode = document.elementFromPoint(t.clientX, t.clientY);
+    fgCanvas.style.pointerEvents = 'auto';
+
+    clearActiveWordHighlights();
+
+    if (hitNode && hitNode.classList.contains('interactive-word')) {
+        hitNode.classList.add('active-touch');
+        if (hitNode.classList.contains('terminal-trigger-word') && currentGlobalClearance > 85) {
+            triggerFlowerStormTransition();
+        }
+    } 
+    else if (hitNode && hitNode.classList.contains('interactive-emoji')) {
+        triggerPopOverlay('emoji-popup-overlay', 2000);
+    } 
+    else if (hitNode && hitNode.classList.contains('interactive-symbol')) {
+        if (hitNode.innerText.includes('❤️') && activePageContext === 3) {
+            switchAppScene(4);
+        }
+    }
+}
+
+window.addEventListener('touchmove', handleFingerSlideAction, { passive: false });
+window.addEventListener('touchend', clearActiveWordHighlights);
+
 function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
     const container = document.getElementById(paragraphId);
     if (!container) return;
@@ -373,14 +406,10 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
             span.innerText = word;
             span.classList.add('interactive-emoji');
             span.addEventListener('mouseenter', () => { if(currentGlobalClearance > 85) triggerPopOverlay('emoji-popup-overlay', 2000); });
-            span.addEventListener('touchstart', () => { if(currentGlobalClearance > 85) triggerPopOverlay('emoji-popup-overlay', 2000); });
         } else if (word.includes('❤️')) {
             span.innerText = word;
             span.classList.add('interactive-symbol'); 
-            
-            // Photo session transition hook
             span.addEventListener('mouseenter', () => { if(activePageContext === 3) switchAppScene(4); });
-            span.addEventListener('touchstart', () => { if(activePageContext === 3) switchAppScene(4); });
         } else {
             span.classList.add('interactive-word');
             span.addEventListener('mouseenter', () => { if (pType !== 'intro' || currentGlobalClearance > 85) span.classList.add('active-touch'); });
@@ -389,22 +418,10 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
             if (terminalMatchKey && word.toLowerCase().includes(terminalMatchKey)) {
                 span.classList.add('terminal-trigger-word');
                 span.addEventListener('mouseenter', () => { if(currentGlobalClearance > 85) triggerFlowerStormTransition(); });
-                span.addEventListener('touchstart', () => { if(currentGlobalClearance > 85) triggerFlowerStormTransition(); });
             }
         }
         container.appendChild(span);
     });
-}
-
-function triggerPopOverlay(overlayId, msDelay) {
-    if (systemLock) return; systemLock = true;
-    const node = document.getElementById(overlayId);
-    node.classList.remove('hidden-element');
-    setTimeout(() => node.classList.add('show'), 10);
-    setTimeout(() => {
-        node.classList.remove('show');
-        setTimeout(() => { node.classList.add('hidden-element'); systemLock = false; }, 300);
-    }, msDelay);
 }
 
 // Drawing Core Pipeline
@@ -439,10 +456,10 @@ drawCanvas.addEventListener('mousemove', (e) => {
 drawCanvas.addEventListener('touchstart', (e) => {
     e.stopPropagation(); if(activePageContext !== 2 || !isDrawingMode) return;
     isDrawingStrokeActive = true; const t = e.touches[0]; executeLocalDrawAction(t.clientX, t.clientY);
-}, { opacity: false });
+}, { passive: false });
 drawCanvas.addEventListener('touchmove', (e) => {
     e.stopPropagation(); if (isDrawingStrokeActive) { const t = e.touches[0]; executeLocalDrawAction(t.clientX, t.clientY); }
-}, { opacity: false });
+}, { passive: false });
 
 function evaluateHeartShapeAccuracy() {
     if (drawnHeartPoints.length < 25) { resetDrawingTask(); return; }
@@ -508,7 +525,7 @@ function trackGlobalInput(e) {
     if (!clientX || !clientY) return;
     const rect = fgCanvas.getBoundingClientRect(); mouse.x = clientX - rect.left; mouse.y = clientY - rect.top; mouse.active = true;
 }
-window.addEventListener('mousemove', trackGlobalInput); window.addEventListener('touchmove', trackGlobalInput, { passive: true });
+window.addEventListener('mousemove', trackGlobalInput);
 
 function resizeCanvases() {
     bgCanvas.width = fgCanvas.width = window.innerWidth; bgCanvas.height = fgCanvas.height = window.innerHeight;
@@ -516,7 +533,18 @@ function resizeCanvases() {
 }
 window.addEventListener('resize', resizeCanvases);
 
+// MODIFIED ENTRY ENGINE: Forces app UI window layer to remain completely 
+// hidden until the background rendering loops have initialized a solid wall of mist
 window.addEventListener('DOMContentLoaded', () => {
-    resizeCanvases(); initDenseForegroundClouds(); initBackgroundAmbientMists();
-    parseTextParagraphIntoSpans('interactive-story-1', 'breath'); animateLayers();
+    resizeCanvases(); 
+    initDenseForegroundClouds(); 
+    initBackgroundAmbientMists();
+    parseTextParagraphIntoSpans('interactive-story-1', 'breath'); 
+    animateLayers();
+    
+    // Smooth cinematic opening delay (gives canvas 100ms to draw fog first)
+    setTimeout(() => {
+        const appViewport = document.getElementById('app-view-container');
+        if (appViewport) appViewport.classList.add('sky-initialized');
+    }, 100);
 });
