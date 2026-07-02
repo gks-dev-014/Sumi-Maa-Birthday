@@ -311,3 +311,25 @@ body, html {
 
 .giant-pop-symbol { font-size: 8rem; animation: pulseEmoji 0.5s ease infinite alternate; }
 @keyframes pulseEmoji { 0% { transform: scale(0.85); } 100% { transform: scale(1.1); } }
+
+/* ==========================================================================
+   9. Music Module Specific Presentation Rules
+   ========================================================================== */
+.box-music {
+    border-color: rgba(147, 197, 253, 0.2);
+    background: rgba(10, 15, 30, 0.3);
+    box-shadow: 0 30px 70px rgba(59, 130, 246, 0.12), 
+                inset 0 1px 2px rgba(147, 197, 253, 0.15);
+}
+
+.music-icon-glow {
+    font-size: 3.2rem;
+    margin-bottom: 1vh;
+    animation: musicPulse 2s ease-in-out infinite alternate;
+    text-shadow: 0 0 20px rgba(147, 197, 253, 0.6);
+}
+
+@keyframes musicPulse {
+    0% { transform: scale(0.95) rotate(-5deg); opacity: 0.7; }
+    100% { transform: scale(1.08) rotate(5deg); opacity: 1; }
+}

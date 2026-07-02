@@ -14,16 +14,14 @@ let mouse = { x: null, y: null, lastX: null, lastY: null, vx: 0, vy: 0, active: 
 let currentGlobalClearance = 0;
 let isTransitioningOut = false;
 let isEntranceSequenceActive = false;
-let activePageContext = 1; // 1: Intro, 2: Drawing, 3: Mehndi Story, 4: Photo Gallery
+let activePageContext = 1; 
 let isDrawingMode = false;
 let isDrawingStrokeActive = false; 
 let systemLock = false;
 
 let drawnHeartPoints = [];
 
-// ==========================================================================
 // Gentle, Super-Slow 2D Bounding Box Floating Moon Engine
-// ==========================================================================
 let cosmicMoon = {
     x: 0,
     y: 0,
@@ -84,7 +82,6 @@ let cosmicMoon = {
 
 function switchAppScene(targetSceneNumber) {
     activePageContext = targetSceneNumber;
-    
     document.querySelectorAll('.view-screen').forEach(sec => sec.classList.add('hidden-layer', 'display-none'));
 
     if (targetSceneNumber === 2) {
@@ -108,7 +105,6 @@ function switchAppScene(targetSceneNumber) {
         parseTextParagraphIntoSpans('mehndi-story');
     }
     else if (targetSceneNumber === 4) {
-        // UNPACK GALLERY MODULE: Smoothly slides and fades out text, then unfolds photo grids
         fgCanvas.style.zIndex = "12";
         fgCanvas.style.opacity = "1";
         initSparseAmbientFlowers();
@@ -116,6 +112,24 @@ function switchAppScene(targetSceneNumber) {
         const galleryView = document.getElementById('view-section-4');
         galleryView.classList.remove('display-none');
         setTimeout(() => galleryView.classList.remove('hidden-layer'), 50);
+
+        // NEW TIMELINE MANAGEMENT ENGINE: Counts 5 seconds precisely before advancing automatically
+        setTimeout(() => {
+            if (activePageContext === 4) {
+                switchAppScene(5);
+            }
+        }, 5000);
+    }
+    else if (targetSceneNumber === 5) {
+        // UNPACK MUSIC MODULE: Smoothly slides into view, parses and binds texts into interactive spans
+        fgCanvas.style.zIndex = "12";
+        fgCanvas.style.opacity = "1";
+        initSparseAmbientFlowers();
+
+        const musicView = document.getElementById('view-section-5');
+        musicView.classList.remove('display-none');
+        setTimeout(() => musicView.classList.remove('hidden-layer'), 50);
+        parseTextParagraphIntoSpans('music-story');
     }
 }
 
@@ -265,6 +279,7 @@ function initSparseAmbientFlowers() {
 
 function buildTwinklingStarsEnvironment() {
     const starField = document.getElementById('dynamic-stars-layer');
+    if (!starField) return;
     starField.innerHTML = '';
     const starCount = Math.floor((window.innerWidth * window.innerHeight) / 6000);
     
@@ -342,11 +357,10 @@ function triggerFlowerStormTransition() {
     }, 600);
 }
 
-// ==========================================================================
 // Text Parsers & Heart Interceptor Matrix
-// ==========================================================================
 function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
     const container = document.getElementById(paragraphId);
+    if (!container) return;
     const pType = container.getAttribute('data-paragraph-type');
     const rawStr = container.innerText;
     container.innerHTML = '';
@@ -364,7 +378,7 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
             span.innerText = word;
             span.classList.add('interactive-symbol'); 
             
-            // PHOTO ROUTING LAYER BINDINGS: Routes to Section 4 seamlessly upon interaction
+            // Photo session transition hook
             span.addEventListener('mouseenter', () => { if(activePageContext === 3) switchAppScene(4); });
             span.addEventListener('touchstart', () => { if(activePageContext === 3) switchAppScene(4); });
         } else {
@@ -393,9 +407,7 @@ function triggerPopOverlay(overlayId, msDelay) {
     }, msDelay);
 }
 
-// ==========================================================================
-// Drawing Pipeline
-// ==========================================================================
+// Drawing Core Pipeline
 function setupDrawingCanvas() {
     const rect = drawCanvas.parentNode.getBoundingClientRect();
     drawCanvas.width = rect.width; drawCanvas.height = rect.height;
@@ -427,10 +439,10 @@ drawCanvas.addEventListener('mousemove', (e) => {
 drawCanvas.addEventListener('touchstart', (e) => {
     e.stopPropagation(); if(activePageContext !== 2 || !isDrawingMode) return;
     isDrawingStrokeActive = true; const t = e.touches[0]; executeLocalDrawAction(t.clientX, t.clientY);
-}, { passive: false });
+}, { opacity: false });
 drawCanvas.addEventListener('touchmove', (e) => {
     e.stopPropagation(); if (isDrawingStrokeActive) { const t = e.touches[0]; executeLocalDrawAction(t.clientX, t.clientY); }
-}, { passive: false });
+}, { opacity: false });
 
 function evaluateHeartShapeAccuracy() {
     if (drawnHeartPoints.length < 25) { resetDrawingTask(); return; }
