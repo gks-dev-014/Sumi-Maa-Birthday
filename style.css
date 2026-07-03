@@ -80,7 +80,6 @@ body, html {
     pointer-events: none; 
 }
 
-/* FIXED CRITICAL VALUE: Permanently set to none so buttons can NEVER be blocked by the canvas overlay */
 #fg-cloud-canvas {
     position: absolute;
     top: 0;
@@ -138,9 +137,40 @@ body, html {
 .memory-title { font-family: 'Playfair Display', serif; font-size: clamp(1.2rem, 1.25rem + 0.15vh, 1.65rem); font-weight: 600; color: #fcd34d; }
 .story-paragraph { font-family: 'Crimson Text', serif; font-size: clamp(0.98rem, 1rem + 0.1vh, 1.22rem); line-height: 1.55; color: #cbd5e1; }
 
-.interactive-word { display: inline-block; transition: color 0.2s, transform 0.2s; padding: 0 1px; }
-.interactive-word.active-touch { transform: scale(1.06) translateY(-1px); font-weight: 600; color: #f43f5e; }
-.interactive-symbol, .interactive-emoji { display: inline-block; padding: 0 2px; }
+/* ==========================================================================
+   UPDATED: High-Performance Typography Kinetic Pop Engine
+   ========================================================================== */
+.interactive-word, .interactive-symbol, .interactive-emoji { 
+    display: inline-block; 
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s ease, text-shadow 0.2s ease; 
+    padding: 0 2px; 
+    cursor: default;
+    will-change: transform, color;
+}
+
+/* Base Pop States (Rose Pink Theme for standard cards) */
+.interactive-word:hover, .interactive-word.active-touch,
+.interactive-symbol:hover, .interactive-symbol.active-touch,
+.interactive-emoji:hover, .interactive-emoji.active-touch { 
+    transform: scale(1.12) translateY(-2px); 
+    font-weight: 600; 
+    color: #f43f5e; 
+    text-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
+}
+
+/* Box-Specific Color Interceptors */
+.box-mehndi .interactive-word:hover, .box-mehndi .interactive-word.active-touch { 
+    color: #fbbf24; 
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.6); 
+}
+.box-cooking .interactive-word:hover, .box-cooking .interactive-word.active-touch { 
+    color: #fb923c; 
+    text-shadow: 0 0 12px rgba(251, 146, 60, 0.6); 
+}
+.box-time .interactive-word:hover, .box-time .interactive-word.active-touch { 
+    color: #34d399; 
+    text-shadow: 0 0 12px rgba(52, 211, 153, 0.6); 
+}
 
 .music-icon-glow, .cooking-icon-glow, .time-icon-glow, .appreciation-icon-glow { font-size: 2.3rem; animation: iconFloat 2.5s ease-in-out infinite alternate; }
 @keyframes iconFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
@@ -174,7 +204,7 @@ body, html {
     width: 100%;
     max-width: 210px;
     position: relative;
-    z-index: 999 !important; /* Pushes button cleanly over any environment bounds */
+    z-index: 999 !important; 
 }
 .celestial-next-action-btn:active {
     background: #ffffff;
