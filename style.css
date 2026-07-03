@@ -11,17 +11,14 @@ body, html {
     background-color: #010204; 
 }
 
-/* MODIFIED: The application viewport container starts completely invisible 
-   to let the foreground mist form a perfect initial shield barrier */
 #app-view-container {
     width: 100%;
     height: 100%;
     position: relative;
     opacity: 0;
-    transition: opacity 1.5s ease-in-out; /* Smoothly cross-fades behind the mist */
+    transition: opacity 1.5s ease-in-out;
 }
 
-/* Utility hook triggered via script once the particle array is packing the screen */
 #app-view-container.sky-initialized {
     opacity: 1;
 }
@@ -132,12 +129,24 @@ body, html {
 }
 
 .box-page1 { border-color: rgba(255, 255, 255, 0.06); }
+.box-mehndi { border-color: rgba(245, 158, 11, 0.25); background: rgba(18, 11, 7, 0.35); box-shadow: 0 30px 70px rgba(217, 119, 6, 0.15), inset 0 1px 2px rgba(252, 211, 77, 0.15); }
+.box-music { border-color: rgba(147, 197, 253, 0.2); background: rgba(10, 15, 30, 0.3); box-shadow: 0 30px 70px rgba(59, 130, 246, 0.12), inset 0 1px 2px rgba(147, 197, 253, 0.15); }
+.box-cooking { border-color: rgba(251, 146, 60, 0.2); background: rgba(24, 14, 10, 0.3); box-shadow: 0 30px 70px rgba(234, 88, 12, 0.12), inset 0 1px 2px rgba(251, 146, 60, 0.15); }
+.box-time { border-color: rgba(16, 185, 129, 0.2); background: rgba(6, 20, 15, 0.25); box-shadow: 0 30px 70px rgba(16, 185, 129, 0.1), inset 0 1px 2px rgba(52, 211, 153, 0.15); }
 
-.box-mehndi { 
-    border-color: rgba(245, 158, 11, 0.25); 
-    background: rgba(18, 11, 7, 0.35); 
-    box-shadow: 0 30px 70px rgba(217, 119, 6, 0.15), 
-                inset 0 1px 2px rgba(252, 211, 77, 0.15);
+/* Premium deep amethyst profile layout specifically styled for the appreciation segment */
+.box-appreciation {
+    border-color: rgba(168, 85, 247, 0.25);
+    background: rgba(18, 10, 28, 0.3);
+    box-shadow: 0 30px 70px rgba(168, 85, 247, 0.12), inset 0 1px 2px rgba(216, 180, 254, 0.15);
+}
+
+/* Heavenly glowing ruby/rose framework profile made for the birthday card card */
+.box-birthday-reveal {
+    border-color: rgba(244, 63, 94, 0.3);
+    background: rgba(28, 8, 12, 0.4);
+    box-shadow: 0 35px 80px rgba(244, 63, 94, 0.2), inset 0 1px 3px rgba(251, 113, 133, 0.25);
+    backdrop-filter: blur(18px);
 }
 
 .quote { 
@@ -186,16 +195,11 @@ body, html {
     padding: 0 1px; 
 }
 
-.interactive-word:hover, .interactive-word.active-touch { 
-    transform: scale(1.15) translateY(-2px); 
-    font-weight: 600; 
-    color: #fda4af; 
-    text-shadow: 0 0 12px rgba(253, 164, 175, 0.5);
-}
-.box-mehndi .interactive-word:hover, .box-mehndi .interactive-word.active-touch { 
-    color: #fbbf24; 
-    text-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
-}
+.interactive-word:hover, .interactive-word.active-touch { transform: scale(1.15) translateY(-2px); font-weight: 600; color: #fda4af; text-shadow: 0 0 12px rgba(253, 164, 175, 0.5); }
+.box-mehndi .interactive-word:hover, .box-mehndi .interactive-word.active-touch { color: #fbbf24; text-shadow: 0 0 12px rgba(251, 191, 36, 0.5); }
+.box-cooking .interactive-word:hover, .box-cooking .interactive-word.active-touch { color: #fdba74; text-shadow: 0 0 12px rgba(251, 146, 60, 0.5); }
+.box-time .interactive-word:hover, .box-time .interactive-word.active-touch { color: #a7f3d0; text-shadow: 0 0 12px rgba(52, 211, 153, 0.5); }
+.box-appreciation .interactive-word:hover, .box-appreciation .interactive-word.active-touch { color: #c084fc; text-shadow: 0 0 12px rgba(168, 85, 247, 0.5); }
 
 .interactive-symbol { display: inline-block; padding: 0 2px; }
 .interactive-emoji { display: inline-block; cursor: pointer; transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 0 2px; }
@@ -216,33 +220,113 @@ body, html {
 .gallery-viewport-capsule { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 95%; max-width: 750px; gap: 3.5vh; }
 .gallery-title-header { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 1.8rem + 0.5vh, 2.5rem); font-weight: 600; color: #fcd34d; text-align: center; letter-spacing: 0.8px; text-shadow: 0 0 20px rgba(252, 211, 77, 0.3); }
 .photos-flex-grid { display: flex; align-items: center; justify-content: center; gap: 4vw; width: 100%; flex-wrap: wrap; }
+.photos-flex-grid.grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2vh 2vw; max-width: 580px; }
 .celestial-photo-frame { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 20px; box-shadow: 0 20px 45px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1); backdrop-filter: blur(12px); width: min(280px, 43vw); display: flex; flex-direction: column; align-items: center; gap: 1.5vh; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15), border-color 0.4s; }
 .celestial-photo-frame:hover { transform: scale(1.04) translateY(-5px); border-color: rgba(252, 211, 77, 0.4); }
+.celestial-photo-frame.mini-frame { width: 100%; padding: 10px; border-radius: 16px; gap: 1vh; }
 .photo-image-placeholder { width: 100%; aspect-ratio: 4/5; background: radial-gradient(circle at 50% 50%, #151f32 0%, #0b101d 100%); border-radius: 12px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05); }
 .photo-image-placeholder img { width: 100%; height: 100%; object-fit: cover; }
 .fallback-frame-sparkle { position: absolute; font-size: 2.2rem; color: rgba(252, 211, 77, 0.4); }
 .photo-caption-text { font-family: 'Crimson Text', serif; font-size: clamp(1.05rem, 1.1rem + 0.2vh, 1.4rem); color: #e2e8f0; font-style: italic; text-align: center; }
+.celestial-photo-frame.mini-frame .photo-caption-text { font-size: clamp(0.9rem, 0.95rem + 0.1vh, 1.2rem); }
 
 /* ==========================================================================
-   8. Music Module Presentation Rules
+   8. Decoration Glow Rules
    ========================================================================== */
-.box-music { border-color: rgba(147, 197, 253, 0.2); background: rgba(10, 15, 30, 0.3); box-shadow: 0 30px 70px rgba(59, 130, 246, 0.12), inset 0 1px 2px rgba(147, 197, 253, 0.15); }
 .music-icon-glow { font-size: 3.2rem; margin-bottom: 1vh; animation: musicPulse 2s ease-in-out infinite alternate; text-shadow: 0 0 20px rgba(147, 197, 253, 0.6); }
 @keyframes musicPulse { 0% { transform: scale(0.95) rotate(-5deg); opacity: 0.7; } 100% { transform: scale(1.08) rotate(5deg); opacity: 1; } }
+.cooking-icon-glow { font-size: 3.2rem; margin-bottom: 1vh; animation: cookingPulse 2s ease-in-out infinite alternate; text-shadow: 0 0 20px rgba(251, 146, 60, 0.6); }
+@keyframes cookingPulse { 0% { transform: scale(0.95) translateY(0); opacity: 0.7; } 100% { transform: scale(1.08) translateY(-4px); opacity: 1; } }
+.time-icon-glow { font-size: 3.2rem; margin-bottom: 1vh; animation: timePulse 2.5s ease-in-out infinite alternate; text-shadow: 0 0 20px rgba(52, 211, 153, 0.6); }
+@keyframes timePulse { 0% { transform: scale(0.93) rotate(0deg); opacity: 0.65; } 100% { transform: scale(1.06) rotate(180deg); opacity: 1; } }
+
+.appreciation-icon-glow {
+    font-size: 3.2rem;
+    margin-bottom: 1vh;
+    animation: shieldPulse 2s ease-in-out infinite alternate;
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+}
+@keyframes shieldPulse {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    100% { transform: scale(1.06); opacity: 1; }
+}
 
 /* ==========================================================================
-   9. Alert Modals & Overlay Filters
+   9. Video Theater Controls & Button Structural Mappings
+   ========================================================================== */
+.video-viewport-capsule { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 92%; max-width: 680px; gap: 3vh; }
+.video-title-header { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 1.7rem + 0.4vh, 2.3rem); font-weight: 600; color: #fcd34d; text-align: center; letter-spacing: 0.6px; text-shadow: 0 0 20px rgba(252, 211, 77, 0.25); }
+.glass-video-wrapper { width: 100%; aspect-ratio: 16/9; background: rgba(3, 7, 18, 0.4); border: 2px solid rgba(255, 255, 255, 0.12); box-shadow: 0 30px 65px rgba(0, 0, 0, 0.7); border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px); }
+.glass-video-wrapper video { width: 100%; height: 100%; object-fit: contain; background: #000000; }
+.video-playlist-controls { display: flex; align-items: center; justify-content: center; gap: 3vw; width: 100%; margin-top: 1vh; flex-wrap: wrap; }
+.playlist-btn { font-family: 'Poppins', sans-serif; font-size: clamp(0.85rem, 0.9rem + 0.1vh, 1.1rem); font-weight: 600; color: #cbd5e1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 22px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; }
+.playlist-btn:hover, .playlist-btn.active-track { color: #020617; background: #fcd34d; border-color: #fcd34d; box-shadow: 0 0 15px rgba(252, 211, 77, 0.4); }
+
+.celestial-next-action-btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.9rem, 0.95rem + 0.1vh, 1.15rem);
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    border: none;
+    padding: 11px 32px;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-top: 1.5vh;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+.celestial-next-action-btn:hover {
+    transform: scale(1.04) translateY(-1px);
+    box-shadow: 0 12px 30px rgba(124, 58, 237, 0.5);
+}
+
+/* ==========================================================================
+   10. Birthday Reveal Typography Matrix
+   ========================================================================== */
+.birthday-title-glow {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 2rem + 0.6vh, 2.8rem);
+    font-weight: 600;
+    color: #fff1f2;
+    text-align: center;
+    letter-spacing: 0.5px;
+    animation: roseGlowPulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes roseGlowPulse {
+    0% { text-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+    100% { text-shadow: 0 0 30px rgba(244, 63, 94, 0.95), 0 0 10px rgba(251, 113, 133, 0.4); }
+}
+
+.birthday-letter-body {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(1.05rem, 1.1rem + 0.3vh, 1.45rem);
+    line-height: 1.65;
+    color: #ffe4e6;
+    text-align: center;
+    font-style: italic;
+    letter-spacing: 0.1px;
+}
+
+.alex-signature-tribute {
+    font-family: 'Alex Brush', cursive;
+    font-size: clamp(2.5rem, 2.8rem + 0.8vh, 3.8rem);
+    color: #fca5a5;
+    text-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
+    margin-top: 1.5vh;
+}
+
+/* ==========================================================================
+   11. Overlays & Dialogue Boxes
    ========================================================================== */
 .interaction-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .interaction-overlay.show { opacity: 1; pointer-events: auto; }
 #emoji-popup-overlay { background: rgba(2, 4, 10, 0.5); backdrop-filter: blur(4px); }
 #custom-alert-overlay { background: rgba(2, 4, 10, 0.8); backdrop-filter: blur(6px); }
-
 .alert-modal-card { background: #0f172a; border: 2px solid #ea580c; padding: 3.5vh 4vw; border-radius: 24px; max-width: 380px; width: 88%; text-align: center; box-shadow: 0 35px 75px rgba(0,0,0,0.85); animation: modalPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes modalPopIn { 0% { transform: scale(0.75); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 .modal-emoji { font-size: 3.8rem; margin-bottom: 1.5vh; }
 .modal-odia-text { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; color: #f8fafc; line-height: 1.5; margin-bottom: 1vh; }
 .modal-score-text { font-family: 'Crimson Text', serif; font-size: 1.05rem; color: #9ca3af; font-style: italic; }
-
 .giant-pop-symbol { font-size: 8rem; animation: pulseEmoji 0.5s ease infinite alternate; }
-@keyframes pulseEmoji { 0% { transform: scale(0.85); } 100% { transform: scale(1.1); } }
