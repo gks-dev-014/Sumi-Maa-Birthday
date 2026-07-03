@@ -51,16 +51,19 @@ function switchAppScene(targetSceneNumber) {
     document.querySelectorAll('video').forEach(vid => { try { vid.pause(); } catch(e){} });
 
     if (targetSceneNumber === 2) {
-        // TURN OFF FOG LAYER FOR DRAWING PAGE
+        // TURN CANVAS OFF COMPLETELY: Guarantees user taps hit the sketch space
+        fgCanvas.style.display = "none";
         fgCanvas.style.pointerEvents = "none";
         fgCanvas.style.zIndex = "1"; fgCanvas.style.opacity = "0"; fgClouds = []; 
+        
         const drawView = document.getElementById('view-section-2');
         drawView.classList.remove('display-none');
         setTimeout(() => drawView.classList.remove('hidden-layer'), 50);
         setupDrawingCanvas();
     } 
     else if (targetSceneNumber === 1 || targetSceneNumber === 12) {
-        // CRITICAL FIX: Re-enable native full-screen swipe pointer mechanics purely for the clearing pages
+        // TURN CANVAS ON: Only for pages requiring full screen swipe interaction
+        fgCanvas.style.display = "block";
         fgCanvas.style.pointerEvents = "auto";
         fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1";
         
@@ -78,7 +81,8 @@ function switchAppScene(targetSceneNumber) {
         }
     }
     else {
-        // CRITICAL FIX: Make the canvas click-through on standard presentation blocks so the buttons work instantly!
+        // REMOVE CANVAS INTERFERENCE: Turns off canvas box mapping completely so buttons work instantly
+        fgCanvas.style.display = "none";
         fgCanvas.style.pointerEvents = "none";
         fgCanvas.style.zIndex = "1"; 
         fgCanvas.style.opacity = "1";
@@ -90,7 +94,7 @@ function switchAppScene(targetSceneNumber) {
             setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
         }
 
-        // Initialize inline styling elements
+        // Initialize typography structures dynamically
         if (targetSceneNumber === 3) parseTextParagraphIntoSpans('mehndi-story');
         if (targetSceneNumber === 5) parseTextParagraphIntoSpans('music-story');
         if (targetSceneNumber === 6) parseTextParagraphIntoSpans('cooking-story');
@@ -103,13 +107,13 @@ function switchAppScene(targetSceneNumber) {
 function bindHardwareTapControls() {
     document.querySelectorAll('.celestial-next-action-btn').forEach(btn => {
         const attachRoute = (e) => {
-            e.preventDefault();
             e.stopPropagation();
             const destination = parseInt(btn.getAttribute('data-route'), 10);
             if (!isNaN(destination)) {
                 switchAppScene(destination);
             }
         };
+        // FIXED: Removed e.preventDefault() to unlock Android click cycles naturally
         btn.ontouchstart = attachRoute;
         btn.onclick = attachRoute;
     });
@@ -229,7 +233,6 @@ function animateLayers() {
         node.draw(fgCtx);
     });
     
-    // Check clearance metrics purely on the initial greeting page
     if (activePageContext === 1 && !isTransitioningOut) { 
         let activeCount = 0; 
         fgClouds.forEach(f => { if (!f.isFlownAway) activeCount++; }); 
@@ -248,7 +251,7 @@ function triggerFlowerStormTransition() {
 function clearActiveWordHighlights() { document.querySelectorAll('.interactive-word').forEach(w => w.classList.remove('active-touch')); }
 
 function handleFingerSlideAction(e) {
-    if (activePageContext !== 1 && activePageContext !== 12) return; // Only process swipes on mist-clearing scenes
+    if (activePageContext !== 1 && activePageContext !== 12) return; 
     const t = e.touches[0];
     const rect = fgCanvas.getBoundingClientRect();
     mouse.x = t.clientX - rect.left; mouse.y = t.clientY - rect.top; mouse.active = true;
@@ -267,7 +270,7 @@ window.addEventListener('touchend', () => { clearActiveWordHighlights(); mouse.a
 
 function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
     const container = document.getElementById(paragraphId); if (!container) return;
-    const pType = container.getAttribute('data-paragraph-type'); const rawStr = container.innerText; container.innerHTML = '';
+    const rawStr = container.innerText; container.innerHTML = '';
     
     rawStr.split(' ').forEach(word => {
         const span = document.createElement('span'); span.innerText = word + ' ';
@@ -278,14 +281,6 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
             span.innerText = word; span.classList.add('interactive-symbol'); 
         } else {
             span.classList.add('interactive-word');
-            span.addEventListener('touchstart', () => { if (pType !== 'intro' || currentGlobalClearance > 85) span.classList.add('active-touch'); });
-            span.addEventListener('touchend', () => span.classList.remove('active-touch'));
-            
-            if (terminalMatchKey && word.toLowerCase().includes(terminalMatchKey)) { 
-                if (paragraphId === 'interactive-story-1') {
-                    span.classList.add('terminal-trigger-word'); 
-                }
-            }
         }
         container.appendChild(span);
     });
