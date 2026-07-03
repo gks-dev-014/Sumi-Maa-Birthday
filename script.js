@@ -118,6 +118,7 @@ function switchAppScene(targetSceneNumber) {
     }
     else if (targetSceneNumber === 12) {
         fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1";
+        // ACTION: Restores the dense flower curtain layout grid setup
         initBirthdayFlowerCurtain(); 
         currentGlobalClearance = 0;
         const birthdayRevealView = document.getElementById('view-section-12');
@@ -183,22 +184,23 @@ class ImmersiveCloudNode {
 }
 
 // ==========================================================================
-// REBUILT: Heavy Interactive Flower Veil Physics (GRAVITY & SETTLING)
+// Celestial Flying Flower Blossom Particle System (WEIGHTLESS FADE CLEAN)
 // ==========================================================================
 class CelestialFlowerBlossom {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.zFactor = Math.random() * 0.5 + 0.5;
-        this.size = (Math.random() * 16 + 18) * this.zFactor; 
-        this.opacity = 1.0; 
+        this.zFactor = Math.random() * 0.6 + 0.4;
+        this.size = (Math.random() * 22 + 20) * this.zFactor; 
+        this.opacity = Math.random() * 0.2 + 0.75; 
+        this.isFlownAway = false;
         
-        // Stationary baseline speeds
-        this.vx = 0;
+        // Weightless drift velocities matching the cloud layer sweep rules
+        this.vx = (Math.random() - 0.5) * 0.4 * (this.zFactor * 1.5);
         this.vy = 0;
         
         this.rotation = Math.random() * Math.PI * 2;
-        this.rotSpeed = (Math.random() - 0.5) * 0.002; 
+        this.rotSpeed = (Math.random() - 0.5) * 0.01;
         this.hueType = Math.random() > 0.45 ? 'rose' : 'cream';
     }
 
@@ -209,10 +211,10 @@ class CelestialFlowerBlossom {
         context.rotate(this.rotation);
         context.globalAlpha = this.opacity;
 
-        context.shadowColor = 'rgba(25, 2, 6, 0.4)';
-        context.shadowBlur = this.size * 0.3;
-        context.shadowOffsetX = 1;
-        context.shadowOffsetY = 2;
+        context.shadowColor = 'rgba(15, 2, 5, 0.4)';
+        context.shadowBlur = 8;
+        context.shadowOffsetX = 3;
+        context.shadowOffsetY = 4;
 
         const petals = 5;
         context.beginPath();
@@ -226,76 +228,57 @@ class CelestialFlowerBlossom {
         if (this.hueType === 'rose') {
             let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size);
             flowerGrad.addColorStop(0, '#ffe4e6'); 
-            flowerGrad.addColorStop(0.4, '#f43f5e'); 
-            flowerGrad.addColorStop(1, '#9f1239'); 
+            flowerGrad.addColorStop(0.3, '#f43f5e'); 
+            flowerGrad.addColorStop(1, '#be123c'); 
             context.fillStyle = flowerGrad;
         } else {
             let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size);
             flowerGrad.addColorStop(0, '#ffffff');
-            flowerGrad.addColorStop(0.5, '#ffe4e6');
-            flowerGrad.addColorStop(1, '#f43f5e');
+            flowerGrad.addColorStop(0.6, '#ffe4e6');
+            flowerGrad.addColorStop(1, '#fda4af');
             context.fillStyle = flowerGrad;
         }
         context.fill();
 
         context.shadowColor = 'transparent';
-        let centerGlow = context.createRadialGradient(0, 0, 0, 0, 0, this.size * 0.25);
+        let centerGlow = context.createRadialGradient(0, 0, 0, 0, 0, this.size * 0.22);
         centerGlow.addColorStop(0, '#fcd34d');
-        centerGlow.addColorStop(0.6, '#fbbf24');
+        centerGlow.addColorStop(0.7, '#f59e0b');
         centerGlow.addColorStop(1, 'rgba(245, 158, 11, 0)');
         context.fillStyle = centerGlow;
         context.beginPath();
-        context.arc(0, 0, this.size * 0.18, 0, Math.PI * 2);
+        context.arc(0, 0, this.size * 0.22, 0, Math.PI * 2);
         context.fill();
 
         context.restore();
     }
 
     update() {
-        // Apply smooth air friction resistance (dampening vectors)
-        this.vx *= 0.96;
-        this.vy *= 0.96;
-        
-        // MODIFIED: Continuous down-pulling gravity vector simulated to represent organic petal weight
-        this.vy += 0.12 * this.zFactor;
-
         this.x += this.vx;
         this.y += this.vy;
         this.rotation += this.rotSpeed;
 
-        if (mouse.active) {
+        if (mouse.active && !this.isFlownAway) {
             const dx = this.x - mouse.x;
             const dy = this.y - mouse.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            const forceRadius = 130;
+            const forceRadius = 150; 
 
             if (distance < forceRadius) {
+                this.isFlownAway = true;
                 const angle = Math.atan2(dy, dx);
                 const pushForce = (forceRadius - distance) / forceRadius;
                 
-                // Explode particles outward with robust kinetic impulse velocity rules
-                this.vx += Math.cos(angle) * pushForce * 8 * this.zFactor + mouse.vx * 0.15;
-                this.vy += Math.sin(angle) * pushForce * 8 * this.zFactor + mouse.vy * 0.15;
-                this.rotSpeed += (Math.random() - 0.5) * 0.1 * pushForce;
+                // Sweeps outward cleanly with fluid kinetic displacement matching the clouds
+                this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25;
+                this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25;
             }
         }
 
-        // FIXED BOTTOM BOUNDARY SETTLING MATRIX: Flowers stack/settle inside window borders instead of dissolving instantly
-        const floorLimit = fgCanvas.height - this.size * 0.5 - 10;
-        if (this.y > floorLimit) {
-            this.y = floorLimit;
-            this.vy *= -0.2; // Soft ground impact bounce absorption
-            this.vx *= 0.8;  // Heavy friction drag roll on floor contact
-            this.rotSpeed *= 0.8;
-        }
-
-        // Horizontal boundary bounce wall reflections
-        if (this.x - this.size < 0) {
-            this.x = this.size;
-            this.vx *= -0.4;
-        } else if (this.x + this.size > fgCanvas.width) {
-            this.x = fgCanvas.width - this.size;
-            this.vx *= -0.4;
+        if (this.isFlownAway) {
+            this.vx *= 0.94;
+            this.vy *= 0.94;
+            this.opacity -= 0.015; // Clean slow fade-out dissolve
         }
     }
 }
@@ -308,16 +291,17 @@ class CosmicShootingStar {
 }
 
 function initDenseForegroundClouds() { fgClouds = []; const spacing = 28; for (let x = -50; x < fgCanvas.width + 50; x += spacing) { for (let y = -50; y < fgCanvas.height + 50; y += spacing) { fgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*22, y + (Math.random()-0.5)*22)); } } fgClouds.sort((a, b) => a.zFactor - b.zFactor); }
+/* Spacing density configured strictly to produce an ultra-dense bouquet curtain mask cover */
 function initBackgroundAmbientMists() { bgClouds = []; const spacing = 75; for (let x = -60; x < bgCanvas.width + 60; x += spacing) { for (let y = 0; y < bgCanvas.height; y += spacing) { bgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*35, y + (Math.random()-0.5)*35, 0, true)); } } }
 function initSparseAmbientFlowers() { isEntranceSequenceActive = false; fgClouds = []; const spacing = 120; for (let x = 40; x < fgCanvas.width; x += spacing) { for (let y = 40; y < fgCanvas.height; y += spacing) { fgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*40, y + (Math.random()-0.5)*40, 0, true)); } } }
 
 function initBirthdayFlowerCurtain() {
     fgClouds = [];
-    const spacing = 19; // Increased mapping allocation grid counts for high cover density
-    for (let x = 10; x < fgCanvas.width; x += spacing) {
-        for (let y = 10; y < fgCanvas.height; y += spacing) {
-            let randOffsetX = (Math.random() - 0.5) * 12;
-            let randOffsetY = (Math.random() - 0.5) * 12;
+    const spacing = 26; 
+    for (let x = -30; x < fgCanvas.width + 30; x += spacing) {
+        for (let y = -30; y < fgCanvas.height + 30; y += spacing) {
+            let randOffsetX = (Math.random() - 0.5) * 16;
+            let randOffsetY = (Math.random() - 0.5) * 16;
             fgClouds.push(new CelestialFlowerBlossom(x + randOffsetX, y + randOffsetY));
         }
     }
