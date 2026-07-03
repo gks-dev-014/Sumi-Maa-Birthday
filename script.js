@@ -44,28 +44,29 @@ let cosmicMoon = {
 function switchAppScene(targetSceneNumber) {
     activePageContext = targetSceneNumber;
     
+    // Hide all view screens immediately
     document.querySelectorAll('.view-screen').forEach(sec => {
         sec.classList.add('hidden-layer', 'display-none');
     });
 
+    // Pause all playing videos globally to prevent audio overlap bugs
     document.querySelectorAll('video').forEach(vid => { try { vid.pause(); } catch(e){} });
 
     if (targetSceneNumber === 2) {
-        // TURN CANVAS OFF COMPLETELY: Guarantees user taps hit the sketch space
         fgCanvas.style.display = "none";
         fgCanvas.style.pointerEvents = "none";
-        fgCanvas.style.zIndex = "1"; fgCanvas.style.opacity = "0"; fgClouds = []; 
+        fgClouds = []; 
         
         const drawView = document.getElementById('view-section-2');
-        drawView.classList.remove('display-none');
-        setTimeout(() => drawView.classList.remove('hidden-layer'), 50);
+        if (drawView) {
+            drawView.classList.remove('display-none');
+            setTimeout(() => drawView.classList.remove('hidden-layer'), 50);
+        }
         setupDrawingCanvas();
     } 
     else if (targetSceneNumber === 1 || targetSceneNumber === 12) {
-        // TURN CANVAS ON: Only for pages requiring full screen swipe interaction
         fgCanvas.style.display = "block";
         fgCanvas.style.pointerEvents = "auto";
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1";
         
         if (targetSceneNumber === 12) {
             initBirthdayFlowerCurtain();
@@ -77,24 +78,30 @@ function switchAppScene(targetSceneNumber) {
         const targetView = document.getElementById(`view-section-${targetSceneNumber}`);
         if (targetView) {
             targetView.classList.remove('display-none');
-            setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
+            setTimeout(() => targetView.classList.remove('hidden-layer'), 150);
         }
     }
     else {
-        // REMOVE CANVAS INTERFERENCE: Turns off canvas box mapping completely so buttons work instantly
         fgCanvas.style.display = "none";
         fgCanvas.style.pointerEvents = "none";
-        fgCanvas.style.zIndex = "1"; 
-        fgCanvas.style.opacity = "1";
-        initSparseAmbientFlowers();
+        fgClouds = [];
 
         const targetView = document.getElementById(`view-section-${targetSceneNumber}`);
         if (targetView) {
             targetView.classList.remove('display-none');
-            setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
+            setTimeout(() => {
+                targetView.classList.remove('hidden-layer');
+                
+                // FIXED CRITICAL VIDEO LIFE CYCLE WAKEUP: Explicitly boots playing video tracks on target display mount
+                targetView.querySelectorAll('video').forEach(vid => {
+                    try {
+                        vid.currentTime = 0;
+                        vid.play().catch(err => console.log("Autoplay context waiting for user touch trigger action"));
+                    } catch(vidError) {}
+                });
+            }, 150);
         }
 
-        // Initialize typography structures dynamically
         if (targetSceneNumber === 3) parseTextParagraphIntoSpans('mehndi-story');
         if (targetSceneNumber === 5) parseTextParagraphIntoSpans('music-story');
         if (targetSceneNumber === 6) parseTextParagraphIntoSpans('cooking-story');
@@ -103,19 +110,20 @@ function switchAppScene(targetSceneNumber) {
     }
 }
 
-// Universal Hardware Tap Routing Engine
+// Universal Code Tap Binder Matrix
 function bindHardwareTapControls() {
     document.querySelectorAll('.celestial-next-action-btn').forEach(btn => {
-        const attachRoute = (e) => {
-            e.stopPropagation();
-            const destination = parseInt(btn.getAttribute('data-route'), 10);
-            if (!isNaN(destination)) {
+        const routeId = btn.getAttribute('data-route') || btn.getAttribute('onclick')?.match(/\d+/)?.[0];
+        const destination = parseInt(routeId, 10);
+        
+        if (!isNaN(destination)) {
+            const runTransition = (e) => {
+                e.stopPropagation();
                 switchAppScene(destination);
-            }
-        };
-        // FIXED: Removed e.preventDefault() to unlock Android click cycles naturally
-        btn.ontouchstart = attachRoute;
-        btn.onclick = attachRoute;
+            };
+            btn.ontouchstart = runTransition;
+            btn.onclick = runTransition;
+        }
     });
 }
 
@@ -199,7 +207,6 @@ class CosmicShootingStar {
 
 function initDenseForegroundClouds() { fgClouds = []; const spacing = 28; for (let x = -50; x < fgCanvas.width + 50; x += spacing) { for (let y = -50; y < fgCanvas.height + 50; y += spacing) { fgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*22, y + (Math.random()-0.5)*22)); } } fgClouds.sort((a, b) => a.zFactor - b.zFactor); }
 function initBackgroundAmbientMists() { bgClouds = []; const spacing = 75; for (let x = -60; x < bgCanvas.width + 60; x += spacing) { for (let y = 0; y < bgCanvas.height; y += spacing) { bgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*35, y + (Math.random()-0.5)*35, 0, true)); } } }
-function initSparseAmbientFlowers() { isEntranceSequenceActive = false; fgClouds = []; const spacing = 120; for (let x = 40; x < fgCanvas.width; x += spacing) { for (let y = 40; y < fgCanvas.height; y += spacing) { fgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*40, y + (Math.random()-0.5)*40, 0, true)); } } }
 
 function initBirthdayFlowerCurtain() {
     fgClouds = [];
@@ -225,7 +232,7 @@ function animateLayers() {
     if (Math.random() < 0.006 && shootingStars.length < 2) { shootingStars.push(new CosmicShootingStar()); } shootingStars.forEach(star => { star.update(); star.draw(); }); shootingStars = shootingStars.filter(star => star.opacity > 0);
     bgClouds.forEach(cloud => { cloud.x += cloud.vx; if (cloud.x > bgCanvas.width + cloud.size) { cloud.x = -cloud.size; cloud.y = Math.random() * bgCanvas.height; } cloud.draw(bgCtx); });
     
-    if (isEntranceSequenceActive || activePageContext === 1 || activePageContext === 12) { 
+    if (activePageContext === 1 || activePageContext === 12) { 
         fgClouds = fgClouds.filter(f => f.opacity > 0); 
     }
     fgClouds.forEach(node => {
@@ -237,16 +244,32 @@ function animateLayers() {
         let activeCount = 0; 
         fgClouds.forEach(f => { if (!f.isFlownAway) activeCount++; }); 
         currentGlobalClearance = ((fgClouds.length - activeCount) / fgClouds.length) * 100; 
-        if (currentGlobalClearance > 85) fgCanvas.classList.add('allow-clicks'); 
-        else fgCanvas.classList.remove('allow-clicks'); 
     }
     requestAnimationFrame(animateLayers);
 }
 
-function triggerFlowerStormTransition() {
-    if (isTransitioningOut) return; isTransitioningOut = true; document.getElementById('view-section-1').classList.add('hidden-layer');
-    setTimeout(() => { document.getElementById('view-section-1').classList.add('display-none'); isTransitioningOut = false; switchAppScene(2); }, 600);
+function updateMouseCoords(clientX, clientY) {
+    const rect = bgCanvas.getBoundingClientRect();
+    mouse.x = clientX - rect.left;
+    mouse.y = clientY - rect.top;
+    mouse.active = true;
 }
+
+window.addEventListener('mousemove', (e) => {
+    if (activePageContext === 1 || activePageContext === 12) {
+        updateMouseCoords(e.clientX, e.clientY);
+    }
+});
+
+window.addEventListener('touchmove', (e) => {
+    if (activePageContext === 1 || activePageContext === 12) {
+        const t = e.touches[0];
+        updateMouseCoords(t.clientX, t.clientY);
+    }
+}, { passive: true });
+
+window.addEventListener('touchend', () => { mouse.active = false; });
+window.addEventListener('mouseup', () => { mouse.active = false; });
 
 function clearActiveWordHighlights() { document.querySelectorAll('.interactive-word').forEach(w => w.classList.remove('active-touch')); }
 
@@ -261,20 +284,18 @@ function handleFingerSlideAction(e) {
 
     if (hitNode && hitNode.classList.contains('interactive-word')) {
         hitNode.classList.add('active-touch');
-        if (hitNode.classList.contains('terminal-trigger-word') && currentGlobalClearance > 85) triggerFlowerStormTransition();
     } 
 }
 
 window.addEventListener('touchmove', handleFingerSlideAction, { passive: false });
 window.addEventListener('touchend', () => { clearActiveWordHighlights(); mouse.active = false; });
 
-function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
+function parseTextParagraphIntoSpans(paragraphId) {
     const container = document.getElementById(paragraphId); if (!container) return;
     const rawStr = container.innerText; container.innerHTML = '';
     
     rawStr.split(' ').forEach(word => {
         const span = document.createElement('span'); span.innerText = word + ' ';
-        
         if (word.includes('🤭') || word.includes('😊') || word.includes('😂')) {
             span.innerText = word; span.classList.add('interactive-emoji');
         } else if (word.includes('❤️') || word.includes('🥰') || word.includes('🙏') || word.includes('🌟')) {
@@ -310,7 +331,23 @@ function processCustomOdiaTwistOutput(score) {
     else { eNode.innerText = "❤️"; tNode.innerText = "Perfect! Bahut sundar heichi!"; setTimeout(() => { closeAlertAndReset(true); }, 2500); }
 }
 
-function closeAlertAndReset(isWin) { const alertOverlay = document.getElementById('custom-alert-overlay'); alertOverlay.classList.remove('show'); setTimeout(() => { alertOverlay.classList.add('hidden-element'); if (isWin) { document.getElementById('view-section-2').classList.add('hidden-layer'); setTimeout(() => { document.getElementById('view-section-2').style.display = 'none'; switchAppScene(3); }, 1000); } else { resetDrawingTask(); } }, 300); }
+function closeAlertAndReset(isWin) { 
+    const alertOverlay = document.getElementById('custom-alert-overlay'); 
+    alertOverlay.classList.remove('show'); 
+    setTimeout(() => { 
+        alertOverlay.classList.add('hidden-element'); 
+        if (isWin) { 
+            const drawSection = document.getElementById('view-section-2');
+            if (drawSection) {
+                drawSection.classList.add('hidden-layer', 'display-none'); 
+            }
+            switchAppScene(3); 
+        } else { 
+            resetDrawingTask(); 
+        } 
+    }, 300); 
+}
+
 function resetDrawingTask() { drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height); setupDrawingCanvas(); }
 
 const handlePointerRelease = () => { if (activePageContext === 2 && isDrawingMode && isDrawingStrokeActive) { isDrawingStrokeActive = false; evaluateHeartShapeAccuracy(); } else { isDrawingStrokeActive = false; } };
@@ -323,8 +360,12 @@ function resizeCanvases() { bgCanvas.width = fgCanvas.width = window.innerWidth;
 window.addEventListener('resize', resizeCanvases);
 
 window.addEventListener('DOMContentLoaded', () => {
-    resizeCanvases(); initDenseForegroundClouds(); initBackgroundAmbientMists();
-    parseTextParagraphIntoSpans('interactive-story-1', 'breath'); animateLayers();
-    bindHardwareTapControls(); 
+    resizeCanvases(); 
+    switchAppScene(1); 
+    animateLayers();
+    bindHardwareTapControls();
     setTimeout(() => { const appViewport = document.getElementById('app-view-container'); if (appViewport) appViewport.classList.add('sky-initialized'); }, 100);
 });
+
+// Exposed Function Anchor Target Matrix
+window.switchAppScene = switchAppScene;
