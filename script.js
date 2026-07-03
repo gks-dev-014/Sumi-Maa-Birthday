@@ -20,7 +20,7 @@ let isDrawingStrokeActive = false;
 
 let drawnHeartPoints = [];
 
-// FIXED MOON VECTOR: Drift parameters calibrated to operate at a perfectly smooth, cinematic pace
+// Gentle, Super-Slow 2D Bounding Box Floating Moon Engine
 let cosmicMoon = {
     x: 0, y: 0, radius: 45, vx: 0.025, vy: 0.012, 
     init() { this.x = bgCanvas.width * 0.5; this.y = bgCanvas.height * 0.25; },
@@ -51,20 +51,38 @@ function switchAppScene(targetSceneNumber) {
     document.querySelectorAll('video').forEach(vid => { try { vid.pause(); } catch(e){} });
 
     if (targetSceneNumber === 2) {
+        // TURN OFF FOG LAYER FOR DRAWING PAGE
+        fgCanvas.style.pointerEvents = "none";
         fgCanvas.style.zIndex = "1"; fgCanvas.style.opacity = "0"; fgClouds = []; 
         const drawView = document.getElementById('view-section-2');
         drawView.classList.remove('display-none');
         setTimeout(() => drawView.classList.remove('hidden-layer'), 50);
         setupDrawingCanvas();
     } 
-    else {
+    else if (targetSceneNumber === 1 || targetSceneNumber === 12) {
+        // CRITICAL FIX: Re-enable native full-screen swipe pointer mechanics purely for the clearing pages
+        fgCanvas.style.pointerEvents = "auto";
         fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1";
+        
         if (targetSceneNumber === 12) {
             initBirthdayFlowerCurtain();
-            currentGlobalClearance = 0;
         } else {
-            initSparseAmbientFlowers();
+            initDenseForegroundClouds();
         }
+        currentGlobalClearance = 0;
+
+        const targetView = document.getElementById(`view-section-${targetSceneNumber}`);
+        if (targetView) {
+            targetView.classList.remove('display-none');
+            setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
+        }
+    }
+    else {
+        // CRITICAL FIX: Make the canvas click-through on standard presentation blocks so the buttons work instantly!
+        fgCanvas.style.pointerEvents = "none";
+        fgCanvas.style.zIndex = "1"; 
+        fgCanvas.style.opacity = "1";
+        initSparseAmbientFlowers();
 
         const targetView = document.getElementById(`view-section-${targetSceneNumber}`);
         if (targetView) {
@@ -72,6 +90,7 @@ function switchAppScene(targetSceneNumber) {
             setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
         }
 
+        // Initialize inline styling elements
         if (targetSceneNumber === 3) parseTextParagraphIntoSpans('mehndi-story');
         if (targetSceneNumber === 5) parseTextParagraphIntoSpans('music-story');
         if (targetSceneNumber === 6) parseTextParagraphIntoSpans('cooking-story');
@@ -80,7 +99,7 @@ function switchAppScene(targetSceneNumber) {
     }
 }
 
-// Universal Hardware Tap Routing Engine (Android Fix)
+// Universal Hardware Tap Routing Engine
 function bindHardwareTapControls() {
     document.querySelectorAll('.celestial-next-action-btn').forEach(btn => {
         const attachRoute = (e) => {
@@ -190,7 +209,6 @@ function initBirthdayFlowerCurtain() {
     }
 }
 
-// FIXED TWINKLE RATIO: Calibrates starfields with varying timing speeds for balanced sky shimmer
 function buildTwinklingStarsEnvironment() {
     const starField = document.getElementById('dynamic-stars-layer'); if (!starField) return; starField.innerHTML = ''; const starCount = Math.floor((window.innerWidth * window.innerHeight) / 4000);
     for(let i=0; i<starCount; i++) { const star = document.createElement('div'); star.classList.add('custom-star'); const diameter = Math.random() * 2.2 + 1; star.style.width = `${diameter}px`; star.style.height = `${diameter}px`; star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`; star.style.animationDelay = `${Math.random() * 4}s`; starField.appendChild(star); }
@@ -203,14 +221,22 @@ function animateLayers() {
     if (Math.random() < 0.006 && shootingStars.length < 2) { shootingStars.push(new CosmicShootingStar()); } shootingStars.forEach(star => { star.update(); star.draw(); }); shootingStars = shootingStars.filter(star => star.opacity > 0);
     bgClouds.forEach(cloud => { cloud.x += cloud.vx; if (cloud.x > bgCanvas.width + cloud.size) { cloud.x = -cloud.size; cloud.y = Math.random() * bgCanvas.height; } cloud.draw(bgCtx); });
     
-    if (isEntranceSequenceActive || activePageContext === 12) { 
+    if (isEntranceSequenceActive || activePageContext === 1 || activePageContext === 12) { 
         fgClouds = fgClouds.filter(f => f.opacity > 0); 
     }
     fgClouds.forEach(node => {
         node.update();
         node.draw(fgCtx);
     });
-    if (activePageContext === 1 && !isTransitioningOut) { let activeCount = 0; fgClouds.forEach(f => { if (!f.isFlownAway) activeCount++; }); currentGlobalClearance = ((fgClouds.length - activeCount) / fgClouds.length) * 100; if (currentGlobalClearance > 85) fgCanvas.classList.add('allow-clicks'); else fgCanvas.classList.remove('allow-clicks'); }
+    
+    // Check clearance metrics purely on the initial greeting page
+    if (activePageContext === 1 && !isTransitioningOut) { 
+        let activeCount = 0; 
+        fgClouds.forEach(f => { if (!f.isFlownAway) activeCount++; }); 
+        currentGlobalClearance = ((fgClouds.length - activeCount) / fgClouds.length) * 100; 
+        if (currentGlobalClearance > 85) fgCanvas.classList.add('allow-clicks'); 
+        else fgCanvas.classList.remove('allow-clicks'); 
+    }
     requestAnimationFrame(animateLayers);
 }
 
@@ -222,7 +248,8 @@ function triggerFlowerStormTransition() {
 function clearActiveWordHighlights() { document.querySelectorAll('.interactive-word').forEach(w => w.classList.remove('active-touch')); }
 
 function handleFingerSlideAction(e) {
-    if (activePageContext === 2) return; const t = e.touches[0];
+    if (activePageContext !== 1 && activePageContext !== 12) return; // Only process swipes on mist-clearing scenes
+    const t = e.touches[0];
     const rect = fgCanvas.getBoundingClientRect();
     mouse.x = t.clientX - rect.left; mouse.y = t.clientY - rect.top; mouse.active = true;
 
@@ -251,9 +278,13 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
             span.innerText = word; span.classList.add('interactive-symbol'); 
         } else {
             span.classList.add('interactive-word');
+            span.addEventListener('touchstart', () => { if (pType !== 'intro' || currentGlobalClearance > 85) span.classList.add('active-touch'); });
+            span.addEventListener('touchend', () => span.classList.remove('active-touch'));
             
             if (terminalMatchKey && word.toLowerCase().includes(terminalMatchKey)) { 
-                span.classList.add('terminal-trigger-word'); 
+                if (paragraphId === 'interactive-story-1') {
+                    span.classList.add('terminal-trigger-word'); 
+                }
             }
         }
         container.appendChild(span);
