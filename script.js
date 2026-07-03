@@ -367,5 +367,22 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { const appViewport = document.getElementById('app-view-container'); if (appViewport) appViewport.classList.add('sky-initialized'); }, 100);
 });
 
-// Exposed Function Anchor Target Matrix
+
+// ==========================================================================
+// BACKGROUND AUDIO UNFREEZER CORE LOGIC
+// ==========================================================================
+function unfreezeBackgroundAudio() {
+    const audioTrack = document.getElementById('sargam-audio');
+    if (audioTrack && audioTrack.paused) {
+        // Play audio safely within the user gesture execution context
+        audioTrack.play().catch(err => console.log("Unfreeze context bound safely to user gesture thread"));
+        
+        // Remove listeners immediately so we don't spam execution cycles
+        window.removeEventListener('touchstart', unfreezeBackgroundAudio);
+        window.removeEventListener('mousedown', unfreezeBackgroundAudio);
+    }
+}
+window.addEventListener('touchstart', unfreezeBackgroundAudio);
+window.addEventListener('mousedown', unfreezeBackgroundAudio);
+
 window.switchAppScene = switchAppScene;
