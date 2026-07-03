@@ -20,10 +20,10 @@ let isDrawingStrokeActive = false;
 
 let drawnHeartPoints = [];
 
-// Gentle, Super-Slow 2D Bounding Box Floating Moon Engine (Drifting Fix)
+// FIXED MOON VECTOR: Drift parameters calibrated to operate at a perfectly smooth, cinematic pace
 let cosmicMoon = {
-    x: 0, y: 0, radius: 55, vx: 0.03, vy: 0.015, 
-    init() { this.x = bgCanvas.width * 0.5; this.y = bgCanvas.height * 0.25; this.vx = 0.03; this.vy = 0.015; },
+    x: 0, y: 0, radius: 45, vx: 0.025, vy: 0.012, 
+    init() { this.x = bgCanvas.width * 0.5; this.y = bgCanvas.height * 0.25; },
     draw() {
         bgCtx.save();
         let glowGradient = bgCtx.createRadialGradient(this.x, this.y, this.radius * 0.05, this.x, this.y, this.radius * 2.2);
@@ -34,18 +34,20 @@ let cosmicMoon = {
     },
     update() {
         this.x += this.vx; this.y += this.vy;
-        if (this.x - this.radius <= 10) { this.x = this.radius + 10; this.vx *= -1; } 
-        else if (this.x + this.radius >= bgCanvas.width - 10) { this.x = bgCanvas.width - this.radius - 10; this.vx *= -1; }
-        if (this.y - this.radius <= 10) { this.y = this.radius + 10; this.vy *= -1; } 
+        if (this.x - this.radius <= 5) { this.x = this.radius + 5; this.vx *= -1; } 
+        else if (this.x + this.radius >= bgCanvas.width - 5) { this.x = bgCanvas.width - this.radius - 5; this.vx *= -1; }
+        if (this.y - this.radius <= 5) { this.y = this.radius + 5; this.vy *= -1; } 
         else if (this.y + this.radius >= bgCanvas.height * 0.45) { this.y = bgCanvas.height * 0.45 - this.radius; this.vy *= -1; }
     }
 };
 
 function switchAppScene(targetSceneNumber) {
     activePageContext = targetSceneNumber;
-    document.querySelectorAll('.view-screen').forEach(sec => sec.classList.add('hidden-layer', 'display-none'));
+    
+    document.querySelectorAll('.view-screen').forEach(sec => {
+        sec.classList.add('hidden-layer', 'display-none');
+    });
 
-    // Secure cross-browser safety fallback loops for videos playing
     document.querySelectorAll('video').forEach(vid => { try { vid.pause(); } catch(e){} });
 
     if (targetSceneNumber === 2) {
@@ -73,19 +75,35 @@ function switchAppScene(targetSceneNumber) {
         if (targetSceneNumber === 3) parseTextParagraphIntoSpans('mehndi-story');
         if (targetSceneNumber === 5) parseTextParagraphIntoSpans('music-story');
         if (targetSceneNumber === 6) parseTextParagraphIntoSpans('cooking-story');
-        if (targetSceneNumber === 8) parseTextParagraphIntoSpans('time-story', 'u.');
-        if (targetSceneNumber === 11) parseTextParagraphIntoSpans('appreciation-story', '🌟');
+        if (targetSceneNumber === 8) parseTextParagraphIntoSpans('time-story');
+        if (targetSceneNumber === 11) parseTextParagraphIntoSpans('appreciation-story');
     }
 }
 
+// Universal Hardware Tap Routing Engine (Android Fix)
+function bindHardwareTapControls() {
+    document.querySelectorAll('.celestial-next-action-btn').forEach(btn => {
+        const attachRoute = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const destination = parseInt(btn.getAttribute('data-route'), 10);
+            if (!isNaN(destination)) {
+                switchAppScene(destination);
+            }
+        };
+        btn.ontouchstart = attachRoute;
+        btn.onclick = attachRoute;
+    });
+}
+
 // ==========================================================================
-// Cloud Architecture Framework Models
+// Particle Engine Modules
 // ==========================================================================
 class ImmersiveCloudNode {
     constructor(x, y, customVy = 0, isAmbient = false) {
         this.x = x; this.y = y; this.isAmbient = isAmbient; this.isFlownAway = customVy > 0;
         this.zFactor = isAmbient ? (Math.random() * 0.4 + 0.3) : Math.random() * 0.7 + 0.3; 
-        this.vx = isAmbient ? (Math.random() * 0.22 + 0.18) : (Math.random() * 0.08 + 0.05) * this.zFactor;
+        this.vx = isAmbient ? (Math.random() * 0.22 + 0.18) : (Math.random() * 0.12 + 0.08) * this.zFactor;
         this.vy = customVy * (this.zFactor * 1.2); 
         this.baseSize = isAmbient ? (Math.random() * 60 + 80) : (Math.random() * 55 + 65);
         this.size = this.baseSize * (this.zFactor * 1.8); 
@@ -115,13 +133,10 @@ class ImmersiveCloudNode {
     }
 }
 
-// ==========================================================================
-// Celestial Flying Flower Blossom Particle System (WEIGHTLESS FADE CLEAN)
-// ==========================================================================
 class CelestialFlowerBlossom {
     constructor(x, y) {
         this.x = x; this.y = y;
-        this.zFactor = Math.random() * 0.5 + 0.5;
+        this.zFactor = Math.random() * 0.6 + 0.4;
         this.size = (Math.random() * 20 + 18) * this.zFactor; 
         this.opacity = Math.random() * 0.2 + 0.75; 
         this.isFlownAway = false;
@@ -175,9 +190,10 @@ function initBirthdayFlowerCurtain() {
     }
 }
 
+// FIXED TWINKLE RATIO: Calibrates starfields with varying timing speeds for balanced sky shimmer
 function buildTwinklingStarsEnvironment() {
-    const starField = document.getElementById('dynamic-stars-layer'); if (!starField) return; starField.innerHTML = ''; const starCount = Math.floor((window.innerWidth * window.innerHeight) / 5000);
-    for(let i=0; i<starCount; i++) { const star = document.createElement('div'); star.classList.add('custom-star'); const diameter = Math.random() * 2.2 + 1; star.style.width = `${diameter}px`; star.style.height = `${diameter}px`; star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`; star.style.animationDelay = `${Math.random() * 4}s`; star.style.animationDuration = `${Math.random() * 3 + 2}s`; starField.appendChild(star); }
+    const starField = document.getElementById('dynamic-stars-layer'); if (!starField) return; starField.innerHTML = ''; const starCount = Math.floor((window.innerWidth * window.innerHeight) / 4000);
+    for(let i=0; i<starCount; i++) { const star = document.createElement('div'); star.classList.add('custom-star'); const diameter = Math.random() * 2.2 + 1; star.style.width = `${diameter}px`; star.style.height = `${diameter}px`; star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`; star.style.animationDelay = `${Math.random() * 4}s`; starField.appendChild(star); }
 }
 
 function animateLayers() {
@@ -205,7 +221,6 @@ function triggerFlowerStormTransition() {
 
 function clearActiveWordHighlights() { document.querySelectorAll('.interactive-word').forEach(w => w.classList.remove('active-touch')); }
 
-// Real-Time Mobile Interception Vector Matrix (Android Hover Pipeline Fix)
 function handleFingerSlideAction(e) {
     if (activePageContext === 2) return; const t = e.touches[0];
     const rect = fgCanvas.getBoundingClientRect();
@@ -217,18 +232,7 @@ function handleFingerSlideAction(e) {
     if (hitNode && hitNode.classList.contains('interactive-word')) {
         hitNode.classList.add('active-touch');
         if (hitNode.classList.contains('terminal-trigger-word') && currentGlobalClearance > 85) triggerFlowerStormTransition();
-        if (hitNode.classList.contains('terminal-time-trigger') && activePageContext === 8) switchAppScene(9);
-        if (hitNode.classList.contains('terminal-appreciation-trigger') && activePageContext === 11) switchAppScene(12);
     } 
-    else if (hitNode && hitNode.classList.contains('interactive-emoji')) {
-        const txt = hitNode.innerText;
-        if ((txt.includes('🤭') || txt.includes('😊')) && activePageContext === 5) switchAppScene(6);
-    } 
-    else if (hitNode && hitNode.classList.contains('interactive-symbol')) {
-        const txt = hitNode.innerText;
-        if (txt.includes('❤️') && activePageContext === 3) switchAppScene(4);
-        else if (txt.includes('🥰') && activePageContext === 6) switchAppScene(7);
-    }
 }
 
 window.addEventListener('touchmove', handleFingerSlideAction, { passive: false });
@@ -243,27 +247,13 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
         
         if (word.includes('🤭') || word.includes('😊') || word.includes('😂')) {
             span.innerText = word; span.classList.add('interactive-emoji');
-            if (paragraphId === 'music-story') span.addEventListener('mouseenter', () => { if(activePageContext === 5) switchAppScene(6); });
         } else if (word.includes('❤️') || word.includes('🥰') || word.includes('🙏') || word.includes('🌟')) {
             span.innerText = word; span.classList.add('interactive-symbol'); 
-            if (word.includes('❤️')) span.addEventListener('mouseenter', () => { if(activePageContext === 3) switchAppScene(4); });
-            if (word.includes('🥰')) span.addEventListener('mouseenter', () => { if(activePageContext === 6) switchAppScene(7); });
         } else {
             span.classList.add('interactive-word');
-            span.addEventListener('mouseenter', () => { if (pType !== 'intro' || currentGlobalClearance > 85) span.classList.add('active-touch'); });
-            span.addEventListener('mouseleave', () => span.classList.remove('active-touch'));
             
             if (terminalMatchKey && word.toLowerCase().includes(terminalMatchKey)) { 
-                if (paragraphId === 'time-story') {
-                    span.classList.add('terminal-time-trigger');
-                } 
-                else if (paragraphId === 'appreciation-story') {
-                    span.classList.add('terminal-appreciation-trigger');
-                }
-                else {
-                    span.classList.add('terminal-trigger-word'); 
-                    span.addEventListener('mouseenter', () => { if(currentGlobalClearance > 85) triggerFlowerStormTransition(); }); 
-                }
+                span.classList.add('terminal-trigger-word'); 
             }
         }
         container.appendChild(span);
@@ -309,5 +299,6 @@ window.addEventListener('resize', resizeCanvases);
 window.addEventListener('DOMContentLoaded', () => {
     resizeCanvases(); initDenseForegroundClouds(); initBackgroundAmbientMists();
     parseTextParagraphIntoSpans('interactive-story-1', 'breath'); animateLayers();
+    bindHardwareTapControls(); 
     setTimeout(() => { const appViewport = document.getElementById('app-view-container'); if (appViewport) appViewport.classList.add('sky-initialized'); }, 100);
 });

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For You, Maa ❤️</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,6 @@
 
     <main id="app-view-container">
 
-        <!-- SECTION 1: The Initial Letter Sweep -->
         <div id="view-section-1" class="view-screen">
             <div class="content-viewport-capsule">
                 <div class="message-box box-page1">
@@ -34,11 +33,13 @@
                         Probably this makes us what we are. Today I am celebrating this bond for its completion 
                         of another year. Hoping it would last until my last breath.
                     </p>
+                    <div class="dual-action-button-row">
+                        <button class="celestial-next-action-btn" data-route="2" style="max-width: 200px;">Agaku Dekha ✨</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 2: Geometric Drawing Canvas -->
         <div id="view-section-2" class="view-screen hidden-layer display-none">
             <div class="drawing-layout-stack">
                 <p class="drawing-instruction-text">
@@ -54,44 +55,45 @@
             </div>
         </div>
 
-        <!-- SECTION 3: Mehndi Story -->
         <div id="view-section-3" class="view-screen hidden-layer display-none">
             <div class="content-viewport-capsule">
-                <div id="memory-card" class="message-box box-mehndi">
+                <div class="message-box box-mehndi">
                     <h1 class="memory-title">My favorite things with U: Mehndi</h1>
                     <p id="mehndi-story" class="story-paragraph" data-paragraph-type="mehndi">
                         I do love making mehndi on your hands. No matter how much effort does it take, its completion and your complements never disheartens me ❤️.
                     </p>
-                    <button class="celestial-next-action-btn" onclick="switchAppScene(4)">Agaku Dekha ✨</button>
+                    <div class="dual-action-button-row">
+                        <button class="celestial-next-action-btn" data-route="4">Agaku Dekha ✨</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 4: Mehndi Photo Gallery -->
         <div id="view-section-4" class="view-screen hidden-layer display-none">
             <div class="gallery-viewport-capsule">
                 <h1 class="gallery-title-header">The last Mehndi session</h1>
                 <div class="photos-flex-grid">
                     <div class="celestial-photo-frame">
                         <div class="photo-image-placeholder">
-                            <img src="before.jpeg" alt="Memory 1" onerror="this.style.display='none';">
+                            <img src="before.jpeg" alt="Before Session" onerror="this.style.display='none';">
                             <span class="fallback-frame-sparkle">✨</span>
                         </div>
                         <p class="photo-caption-text">Before</p>
                     </div>
                     <div class="celestial-photo-frame">
                         <div class="photo-image-placeholder">
-                            <img src="after.jpeg" alt="Memory 2" onerror="this.style.display='none';">
+                            <img src="after.jpeg" alt="After Session" onerror="this.style.display='none';">
                             <span class="fallback-frame-sparkle">❤️</span>
                         </div>
                         <p class="photo-caption-text">After</p>
                     </div>
                 </div>
-                <button class="celestial-next-action-btn" onclick="switchAppScene(5)">Agaku Dekha ✨</button>
+                <div class="dual-action-button-row">
+                    <button class="celestial-next-action-btn" data-route="5">Agaku Dekha ✨</button>
+                </div>
             </div>
         </div>
 
-        <!-- SECTION 5: Musical Connection -->
         <div id="view-section-5" class="view-screen hidden-layer display-none">
             <div class="content-viewport-capsule">
                 <div class="message-box box-music">
@@ -100,12 +102,13 @@
                     <p id="music-story" class="story-paragraph" data-paragraph-type="music">
                         I love when we share melodies and harmonies together. Listening to your voice, singing along, or simply appreciating music side by side creates a deep peace within my soul. You are one of my reasons for which I can now sing confidently 🤭.
                     </p>
-                    <button class="celestial-next-action-btn" onclick="switchAppScene(6)">Agaku Dekha ✨</button>
+                    <div class="dual-action-button-row">
+                        <button class="celestial-next-action-btn" data-route="6">Agaku Dekha ✨</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 6: Making & Eating Together Story -->
         <div id="view-section-6" class="view-screen hidden-layer display-none">
             <div class="content-viewport-capsule">
                 <div class="message-box box-cooking">
@@ -114,19 +117,20 @@
                     <p id="cooking-story" class="story-paragraph" data-paragraph-type="cooking">
                         I love when we cook together and eat together. Specially when you teach me dishes and I mess it up knowingly 😂. Anyway my favorite part is U feeding me 🥰.
                     </p>
-                    <button class="celestial-next-action-btn" onclick="switchAppScene(7)">Agaku Dekha ✨</button>
+                    <div class="dual-action-button-row">
+                        <button class="celestial-next-action-btn" data-route="7">Agaku Dekha ✨</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 7: Eating Together Media Grid -->
         <div id="view-section-7" class="view-screen hidden-layer display-none">
             <div class="gallery-viewport-capsule">
                 <h1 class="gallery-title-header">Delicious Shared Moments</h1>
                 <div class="photos-flex-grid grid-2x2">
                     <div class="celestial-photo-frame mini-frame">
                         <div class="photo-image-placeholder">
-                            <img src="khana.jpeg" alt="Dish 1" onerror="this.style.display='none';">
+                            <img src="khana.jpeg" alt="Food Memory" onerror="this.style.display='none';">
                             <span class="fallback-frame-sparkle">🥗</span>
                         </div>
                         <p class="photo-caption-text">Us Eating Together</p>
@@ -135,37 +139,37 @@
                         <div class="photo-image-placeholder">
                             <video src="khana.mp4" controls loop muted playsinline autoplay></video>
                         </div>
-                        <p class="photo-caption-text">Ur Noodles and Expressions</p>
+                        <p class="photo-caption-text">Ur Noodles & Expressions</p>
                     </div>
                 </div>
-                <button class="celestial-next-action-btn" onclick="switchAppScene(8)">Agaku Dekha ✨</button>
+                <div class="dual-action-button-row">
+                    <button class="celestial-next-action-btn" data-route="8">Agaku Dekha ✨</button>
+                </div>
             </div>
         </div>
 
-        <!-- SECTION 8: Time Together Story -->
         <div id="view-section-8" class="view-screen hidden-layer display-none">
             <div class="content-viewport-capsule">
-                <div id="time-story-card" class="message-box box-time">
+                <div class="message-box box-time">
                     <div class="time-icon-glow">⏳</div>
                     <h1 class="memory-title">The Way We Spend Time Together is just Awsome</h1>
                     <p id="time-story" class="story-paragraph" data-paragraph-type="time">
                         Every moment I spend with you feels good and joyful and cheerful and beautiful and wonderful and graceful and am greatful for all this 🙏. Even the departure feels great with U, although both of us cry 😊. Can't actually find which one is my most favorite thing among the time we have cherised together...Just wanna say there's not a single moment when I have become bored near U.
                     </p>
-                    <button class="celestial-next-action-btn" onclick="switchAppScene(9)">Agaku Dekha ✨</button>
+                    <div class="dual-action-button-row">
+                        <button class="celestial-next-action-btn" data-route="9">Agaku Dekha ✨</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 9: Time Together Integrated Hyper-Grid Map -->
         <div id="view-section-9" class="view-screen hidden-layer display-none">
             <div class="gallery-viewport-capsule structural-dense-override">
                 <h1 class="gallery-title-header">Cherished Days Together</h1>
-                
-                <!-- INTEGRATED COMPACT CONTAINER STACK: Button mapped directly inside the fluid mesh plane -->
                 <div class="photos-hybrid-action-mesh">
                     <div class="celestial-photo-frame mini-frame">
                         <div class="photo-image-placeholder">
-                            <img src="time.jpeg" alt="Time 1" onerror="this.style.display='none';">
+                            <img src="time.jpeg" alt="Time Memory" onerror="this.style.display='none';">
                             <span class="fallback-frame-sparkle">📸</span>
                         </div>
                         <p class="photo-caption-text">Every Small Joy</p>
@@ -182,16 +186,13 @@
                         </div>
                         <p class="photo-caption-text">Wonderful Outings</p>
                     </div>
-                    
-                    <!-- ACTION INTERCEPTOR ANCHOR CELL: Re-mapped inside to fit constraints -->
-                    <div class="action-grid-cell-anchor">
-                        <button class="celestial-next-action-btn horizontal-mesh-btn" onclick="switchAppScene(11)">Agaku Dekha ✨</button>
+                    <div class="action-grid-cell-anchor dual-mesh-cell">
+                        <button class="celestial-next-action-btn horizontal-mesh-btn" data-route="11">Agaku Dekha ✨</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 11: Strength, Appreciation & Admiration -->
         <div id="view-section-11" class="view-screen hidden-layer display-none">
             <div class="content-viewport-capsule">
                 <div class="message-box box-appreciation">
@@ -200,12 +201,13 @@
                     <p id="appreciation-story" class="story-paragraph" data-paragraph-type="appreciation">
                         Maa, your strengths are greater than anything I know. I deeply appreciate your endless support(even it hurts you sometimes), and I admire how fiercely you feel and care for me. I love & respect you with all my heart, and I want our beautiful bond to remain forever and ever 🌟.
                     </p>
-                    <button class="celestial-next-action-btn" onclick="switchAppScene(12)">Agaku Dekha ✨</button>
+                    <div class="dual-action-button-row">
+                        <button class="celestial-next-action-btn" data-route="12">Agaku Dekha ✨</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 12: Grand Finale Birthday Reveal Module -->
         <div id="view-section-12" class="view-screen hidden-layer display-none">
             <div class="content-viewport-capsule">
                 <div class="message-box box-birthday-reveal">
