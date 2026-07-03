@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
@@ -32,16 +33,16 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2vh 2vw; 
+    padding: 2vh 4vw; 
     z-index: 5; 
-    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.hidden-layer { opacity: 0; pointer-events: none; transform: scale(0.96) translateY(15px); }
+.hidden-layer { opacity: 0; pointer-events: none; transform: scale(0.95) translateY(20px); }
 .display-none { display: none !important; }
 
 /* ==========================================================================
-   2. Starry Night Backdrop Architecture
+   2. Celestial Backdrop Architecture
    ========================================================================== */
 #sky-environment {
     position: absolute;
@@ -49,7 +50,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 50% 35%, #040914 0%, #010204 85%);
+    background: radial-gradient(circle at 50% 35%, #050b1a 0%, #010204 90%);
     z-index: 1;
     overflow: hidden;
 }
@@ -58,30 +59,17 @@ body, html {
     position: absolute;
     background-color: #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
     animation: smoothGlow infinite alternate ease-in-out;
 }
 
 @keyframes smoothGlow {
     0% { opacity: 0.2; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1.3); }
 }
 
 /* ==========================================================================
-   3. Combined Content Stack Layouts
-   ========================================================================== */
-.content-viewport-capsule {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 650px;
-    position: relative;
-}
-
-/* ==========================================================================
-   4. Multi-Layer Canvas Layer Stacking Configuration
+   3. Multi-Layer Canvas Stacking Engine
    ========================================================================== */
 #bg-cloud-canvas {
     position: absolute;
@@ -90,7 +78,6 @@ body, html {
     width: 100%;
     height: 100%;
     z-index: 2; 
-    background: transparent;
     pointer-events: none; 
 }
 
@@ -102,231 +89,281 @@ body, html {
     height: 100%;
     z-index: 12; 
     background: transparent;
-    transition: z-index 0.1s step-end, opacity 0.5s ease;
 }
 #fg-cloud-canvas.allow-clicks { pointer-events: none; }
 
 /* ==========================================================================
-   5. Glassmorphic Cards (Crystal Clear Content Containment)
+   4. Glassmorphic Luxury Message Container Modules
    ========================================================================== */
+.content-viewport-capsule {
+    width: 100%;
+    max-width: 620px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .message-box {
     text-align: center;
     width: 100%;
-    max-height: 78vh; 
-    padding: 4.5vh 5vw;
-    background: rgba(3, 7, 18, 0.2); 
+    max-height: 85vh; 
+    padding: 3.5vh 5vw;
+    background: rgba(4, 8, 20, 0.3); 
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.08);
-    border-radius: 26px;
-    backdrop-filter: blur(14px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     z-index: 3; 
-    overflow: hidden; 
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2vh; 
+    gap: 2.5vh; 
 }
 
 .box-page1 { border-color: rgba(255, 255, 255, 0.06); }
-.box-mehndi { border-color: rgba(245, 158, 11, 0.25); background: rgba(18, 11, 7, 0.35); box-shadow: 0 30px 70px rgba(217, 119, 6, 0.15), inset 0 1px 2px rgba(252, 211, 77, 0.15); }
-.box-music { border-color: rgba(147, 197, 253, 0.2); background: rgba(10, 15, 30, 0.3); box-shadow: 0 30px 70px rgba(59, 130, 246, 0.12), inset 0 1px 2px rgba(147, 197, 253, 0.15); }
-.box-cooking { border-color: rgba(251, 146, 60, 0.2); background: rgba(24, 14, 10, 0.3); box-shadow: 0 30px 70px rgba(234, 88, 12, 0.12), inset 0 1px 2px rgba(251, 146, 60, 0.15); }
-.box-time { border-color: rgba(16, 185, 129, 0.2); background: rgba(6, 20, 15, 0.25); box-shadow: 0 30px 70px rgba(16, 185, 129, 0.1), inset 0 1px 2px rgba(52, 211, 153, 0.15); }
+.box-mehndi { border-color: rgba(245, 158, 11, 0.2); background: rgba(18, 12, 6, 0.35); }
+.box-music { border-color: rgba(147, 197, 253, 0.2); background: rgba(8, 14, 28, 0.35); }
+.box-cooking { border-color: rgba(251, 146, 60, 0.2); background: rgba(20, 12, 8, 0.35); }
+.box-time { border-color: rgba(52, 211, 153, 0.2); background: rgba(6, 20, 14, 0.35); }
+.box-appreciation { border-color: rgba(244, 63, 94, 0.2); background: rgba(24, 8, 14, 0.35); }
 
-/* Premium deep amethyst profile layout specifically styled for the appreciation segment */
-.box-appreciation {
-    border-color: rgba(168, 85, 247, 0.25);
-    background: rgba(18, 10, 28, 0.3);
-    box-shadow: 0 30px 70px rgba(168, 85, 247, 0.12), inset 0 1px 2px rgba(216, 180, 254, 0.15);
-}
-
-/* Heavenly glowing ruby/rose framework profile made for the birthday card card */
 .box-birthday-reveal {
-    border-color: rgba(244, 63, 94, 0.3);
-    background: rgba(28, 8, 12, 0.4);
-    box-shadow: 0 35px 80px rgba(244, 63, 94, 0.2), inset 0 1px 3px rgba(251, 113, 133, 0.25);
-    backdrop-filter: blur(18px);
+    border-color: rgba(244, 63, 94, 0.35);
+    background: rgba(28, 6, 10, 0.45);
+    box-shadow: 0 35px 80px rgba(244, 63, 94, 0.25), inset 0 1px 3px rgba(251, 113, 133, 0.2);
 }
 
+/* Typography Matrix Profiles */
 .quote { 
     font-family: 'Playfair Display', serif; 
-    font-size: clamp(1.05rem, 1.15rem + 0.4vh, 1.6rem); 
+    font-size: clamp(1.1rem, 1.15rem + 0.4vh, 1.55rem); 
     font-style: italic; 
-    line-height: 1.5; 
-    color: #f1f5f9; 
-    width: 100%;
-    letter-spacing: 0.3px;
-    text-shadow: 0 0 15px rgba(241, 245, 249, 0.15); 
+    line-height: 1.55; 
+    color: #f8fafc; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 .maa-signature { 
     font-family: 'Alex Brush', cursive; 
-    font-size: clamp(2.2rem, 2.4rem + 0.6vh, 3.2rem); 
-    color: #ffb7c5; 
-    display: inline-block; 
-    padding-left: 6px; 
-    text-shadow: 0 0 15px rgba(255, 183, 197, 0.3);
+    font-size: clamp(2.3rem, 2.5rem + 0.6vh, 3.4rem); 
+    color: #fda4af; 
+    text-shadow: 0 0 15px rgba(253, 164, 175, 0.4);
 }
 
 .memory-title { 
     font-family: 'Playfair Display', serif; 
-    font-size: clamp(1.3rem, 1.4rem + 0.4vh, 2rem); 
+    font-size: clamp(1.25rem, 1.35rem + 0.3vh, 1.9rem); 
     font-weight: 600; 
     color: #fcd34d; 
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 20px rgba(252, 211, 77, 0.25);
+    text-shadow: 0 2px 12px rgba(252, 211, 77, 0.2);
 }
 
 .story-paragraph { 
     font-family: 'Crimson Text', serif; 
-    font-size: clamp(0.95rem, 1rem + 0.3vh, 1.35rem); 
+    font-size: clamp(1rem, 1.02rem + 0.25vh, 1.35rem); 
     line-height: 1.6; 
     color: #cbd5e1; 
-    width: 100%; 
-    text-align: center;
-    letter-spacing: 0.2px;
 }
 
-.interactive-word { 
-    display: inline-block; 
-    cursor: pointer; 
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s, text-shadow 0.2s; 
-    padding: 0 1px; 
-}
+/* Interactive Spans */
+.interactive-word { display: inline-block; transition: transform 0.2s ease, color 0.2s; padding: 0 1px; }
+.interactive-word.active-touch { transform: scale(1.1) translateY(-1px); font-weight: 600; color: #f43f5e; text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
+.box-mehndi .interactive-word.active-touch { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+.box-cooking .interactive-word.active-touch { color: #fb923c; text-shadow: 0 0 10px rgba(251, 146, 60, 0.4); }
+.box-time .interactive-word.active-touch { color: #34d399; text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
 
-.interactive-word:hover, .interactive-word.active-touch { transform: scale(1.15) translateY(-2px); font-weight: 600; color: #fda4af; text-shadow: 0 0 12px rgba(253, 164, 175, 0.5); }
-.box-mehndi .interactive-word:hover, .box-mehndi .interactive-word.active-touch { color: #fbbf24; text-shadow: 0 0 12px rgba(251, 191, 36, 0.5); }
-.box-cooking .interactive-word:hover, .box-cooking .interactive-word.active-touch { color: #fdba74; text-shadow: 0 0 12px rgba(251, 146, 60, 0.5); }
-.box-time .interactive-word:hover, .box-time .interactive-word.active-touch { color: #a7f3d0; text-shadow: 0 0 12px rgba(52, 211, 153, 0.5); }
-.box-appreciation .interactive-word:hover, .box-appreciation .interactive-word.active-touch { color: #c084fc; text-shadow: 0 0 12px rgba(168, 85, 247, 0.5); }
+.interactive-symbol, .interactive-emoji { display: inline-block; padding: 0 1px; }
 
-.interactive-symbol { display: inline-block; padding: 0 2px; }
-.interactive-emoji { display: inline-block; cursor: pointer; transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 0 2px; }
-.interactive-emoji:hover, .interactive-emoji.active-touch { transform: scale(1.25); }
+/* Icons */
+.music-icon-glow, .cooking-icon-glow, .time-icon-glow, .appreciation-icon-glow { font-size: 3rem; animation: iconFloat 2.5s ease-in-out infinite alternate; }
+@keyframes iconFloat { 0% { transform: translateY(0) scale(0.96); } 100% { transform: translateY(-5px) scale(1.04); } }
 
 /* ==========================================================================
-   6. Drawing Layer Stacking Layout
+   5. Action Buttons & Bounding Core Control Loops
+   ========================================================================== */
+.celestial-next-action-btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.85rem, 0.88rem + 0.1vh, 1.05rem);
+    font-weight: 600;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 10px 32px;
+    border-radius: 14px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+.celestial-next-action-btn:active {
+    background: #ffffff;
+    color: #020617;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   6. Drawing Layer Configuration
    ========================================================================== */
 .drawing-layout-stack { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; width: 100%; }
-.drawing-instruction-text { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 1.15rem + 0.3vh, 1.5rem); font-style: italic; color: #f1f5f9; text-align: center; max-width: 90%; line-height: 1.5; letter-spacing: 0.2px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
-.canvas-wrapper { position: relative; width: min(295px, 78vw); height: min(425px, 75vh); background: radial-gradient(circle at 50% 40%, #ffffff 0%, #f1f5f9 100%); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 32px; box-shadow: 0 25px 55px rgba(255, 255, 255, 0.08), 0 15px 45px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.6); }
+.drawing-instruction-text { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 1.15rem + 0.3vh, 1.45rem); font-style: italic; color: #f1f5f9; text-align: center; max-width: 90%; }
+.canvas-wrapper { position: relative; width: min(290px, 76vw); height: min(410px, 70vh); background: radial-gradient(circle at 50% 40%, #ffffff 0%, #e2e8f0 100%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 32px; box-shadow: 0 25px 55px rgba(0, 0, 0, 0.5); }
 #hand-outline { position: absolute; top: 6%; left: 6%; width: 88%; height: 88%; z-index: 1; pointer-events: none; }
 #draw-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; cursor: crosshair; }
 
 /* ==========================================================================
-   7. Heavenly Photo Gallery Module
+   7. Media Grids & Polaroid Formatting
    ========================================================================== */
-.gallery-viewport-capsule { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 95%; max-width: 750px; gap: 3.5vh; }
-.gallery-title-header { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 1.8rem + 0.5vh, 2.5rem); font-weight: 600; color: #fcd34d; text-align: center; letter-spacing: 0.8px; text-shadow: 0 0 20px rgba(252, 211, 77, 0.3); }
-.photos-flex-grid { display: flex; align-items: center; justify-content: center; gap: 4vw; width: 100%; flex-wrap: wrap; }
-.photos-flex-grid.grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2vh 2vw; max-width: 580px; }
-.celestial-photo-frame { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 20px; box-shadow: 0 20px 45px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1); backdrop-filter: blur(12px); width: min(280px, 43vw); display: flex; flex-direction: column; align-items: center; gap: 1.5vh; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15), border-color 0.4s; }
-.celestial-photo-frame:hover { transform: scale(1.04) translateY(-5px); border-color: rgba(252, 211, 77, 0.4); }
-.celestial-photo-frame.mini-frame { width: 100%; padding: 10px; border-radius: 16px; gap: 1vh; }
-.photo-image-placeholder { width: 100%; aspect-ratio: 4/5; background: radial-gradient(circle at 50% 50%, #151f32 0%, #0b101d 100%); border-radius: 12px; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05); }
-.photo-image-placeholder img { width: 100%; height: 100%; object-fit: cover; }
-.fallback-frame-sparkle { position: absolute; font-size: 2.2rem; color: rgba(252, 211, 77, 0.4); }
-.photo-caption-text { font-family: 'Crimson Text', serif; font-size: clamp(1.05rem, 1.1rem + 0.2vh, 1.4rem); color: #e2e8f0; font-style: italic; text-align: center; }
-.celestial-photo-frame.mini-frame .photo-caption-text { font-size: clamp(0.9rem, 0.95rem + 0.1vh, 1.2rem); }
-
-/* ==========================================================================
-   8. Decoration Glow Rules
-   ========================================================================== */
-.music-icon-glow { font-size: 3.2rem; margin-bottom: 1vh; animation: musicPulse 2s ease-in-out infinite alternate; text-shadow: 0 0 20px rgba(147, 197, 253, 0.6); }
-@keyframes musicPulse { 0% { transform: scale(0.95) rotate(-5deg); opacity: 0.7; } 100% { transform: scale(1.08) rotate(5deg); opacity: 1; } }
-.cooking-icon-glow { font-size: 3.2rem; margin-bottom: 1vh; animation: cookingPulse 2s ease-in-out infinite alternate; text-shadow: 0 0 20px rgba(251, 146, 60, 0.6); }
-@keyframes cookingPulse { 0% { transform: scale(0.95) translateY(0); opacity: 0.7; } 100% { transform: scale(1.08) translateY(-4px); opacity: 1; } }
-.time-icon-glow { font-size: 3.2rem; margin-bottom: 1vh; animation: timePulse 2.5s ease-in-out infinite alternate; text-shadow: 0 0 20px rgba(52, 211, 153, 0.6); }
-@keyframes timePulse { 0% { transform: scale(0.93) rotate(0deg); opacity: 0.65; } 100% { transform: scale(1.06) rotate(180deg); opacity: 1; } }
-
-.appreciation-icon-glow {
-    font-size: 3.2rem;
-    margin-bottom: 1vh;
-    animation: shieldPulse 2s ease-in-out infinite alternate;
-    text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
-}
-@keyframes shieldPulse {
-    0% { transform: scale(0.95); opacity: 0.7; }
-    100% { transform: scale(1.06); opacity: 1; }
+.gallery-viewport-capsule { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%; 
+    max-width: 650px; 
+    gap: 2.5vh; 
 }
 
-/* ==========================================================================
-   9. Video Theater Controls & Button Structural Mappings
-   ========================================================================== */
-.video-viewport-capsule { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 92%; max-width: 680px; gap: 3vh; }
-.video-title-header { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 1.7rem + 0.4vh, 2.3rem); font-weight: 600; color: #fcd34d; text-align: center; letter-spacing: 0.6px; text-shadow: 0 0 20px rgba(252, 211, 77, 0.25); }
-.glass-video-wrapper { width: 100%; aspect-ratio: 16/9; background: rgba(3, 7, 18, 0.4); border: 2px solid rgba(255, 255, 255, 0.12); box-shadow: 0 30px 65px rgba(0, 0, 0, 0.7); border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px); }
-.glass-video-wrapper video { width: 100%; height: 100%; object-fit: contain; background: #000000; }
-.video-playlist-controls { display: flex; align-items: center; justify-content: center; gap: 3vw; width: 100%; margin-top: 1vh; flex-wrap: wrap; }
-.playlist-btn { font-family: 'Poppins', sans-serif; font-size: clamp(0.85rem, 0.9rem + 0.1vh, 1.1rem); font-weight: 600; color: #cbd5e1; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 22px; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; }
-.playlist-btn:hover, .playlist-btn.active-track { color: #020617; background: #fcd34d; border-color: #fcd34d; box-shadow: 0 0 15px rgba(252, 211, 77, 0.4); }
+/* MODIFIED: Section 9 wrapper is configured to maximize safe single-page area */
+.gallery-viewport-capsule.structural-dense-override {
+    max-height: 95vh;
+}
 
-.celestial-next-action-btn {
-    font-family: 'Poppins', sans-serif;
-    font-size: clamp(0.9rem, 0.95rem + 0.1vh, 1.15rem);
-    font-weight: 600;
-    color: #ffffff;
-    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-    border: none;
-    padding: 11px 32px;
+.gallery-title-header { 
+    font-family: 'Playfair Display', serif; 
+    font-size: clamp(1.4rem, 1.5rem + 0.3vh, 2.1rem); 
+    font-weight: 600; 
+    color: #fcd34d; 
+    text-align: center; 
+}
+
+.photos-flex-grid { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 3.5vw; 
+    width: 100%; 
+}
+
+.photos-flex-grid.grid-2x2 { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 2vh 3vw; 
+    max-width: 500px; 
+}
+
+/* ==========================================================================
+   NEW: Real-time Multi-Dimensional Hybrid Mesh (SECTION 9 INTERVENTION)
+   ========================================================================== */
+.photos-hybrid-action-mesh {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8vh 2.5vw;
+    width: 100%;
+    max-width: 480px;
+    align-items: center;
+}
+
+.celestial-photo-frame { 
+    background: rgba(255, 255, 255, 0.04); 
+    border: 1px solid rgba(255, 255, 255, 0.12); 
+    padding: 10px; 
+    border-radius: 18px; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    width: 100%;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 1vh; 
+}
+
+/* Strict scaling overrides to lock contents inside smaller screens */
+.celestial-photo-frame.mini-frame { 
+    padding: 8px; 
+    border-radius: 14px; 
+}
+
+.photo-image-placeholder { 
+    width: 100%; 
+    aspect-ratio: 4/5; 
+    background: radial-gradient(circle at 50% 50%, #0c111d 0%, #020408 100%); 
+    border-radius: 10px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden; 
+}
+
+.photo-image-placeholder img, .photo-image-placeholder video { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+/* Video element explicitly locked to scale perfectly inline inside grids */
+.photo-image-placeholder video {
+    max-height: 100%;
+    background: #000000;
+}
+
+.photo-caption-text { 
+    font-family: 'Crimson Text', serif; 
+    font-size: clamp(0.9rem, 0.92rem + 0.1vh, 1.15rem); 
+    color: #e2e8f0; 
+    font-style: italic; 
+    text-align: center; 
+}
+
+/* Action anchor box that dynamically transforms the button into a native grid cell */
+.action-grid-cell-anchor {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.celestial-next-action-btn.horizontal-mesh-btn {
+    width: 100%;
+    height: min(65px, 12vh);
+    margin-top: 0;
+    padding: 5px;
     border-radius: 14px;
-    cursor: pointer;
-    margin-top: 1.5vh;
-    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
-    transition: transform 0.25s, box-shadow 0.25s;
+    background: linear-gradient(135deg, rgba(252, 211, 77, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
+    border-color: rgba(252, 211, 77, 0.3);
+    color: #fcd34d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.celestial-next-action-btn:hover {
-    transform: scale(1.04) translateY(-1px);
-    box-shadow: 0 12px 30px rgba(124, 58, 237, 0.5);
-}
-
-/* ==========================================================================
-   10. Birthday Reveal Typography Matrix
-   ========================================================================== */
-.birthday-title-glow {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 2rem + 0.6vh, 2.8rem);
-    font-weight: 600;
-    color: #fff1f2;
-    text-align: center;
-    letter-spacing: 0.5px;
-    animation: roseGlowPulse 2.5s ease-in-out infinite alternate;
-}
-
-@keyframes roseGlowPulse {
-    0% { text-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
-    100% { text-shadow: 0 0 30px rgba(244, 63, 94, 0.95), 0 0 10px rgba(251, 113, 133, 0.4); }
-}
-
-.birthday-letter-body {
-    font-family: 'Crimson Text', serif;
-    font-size: clamp(1.05rem, 1.1rem + 0.3vh, 1.45rem);
-    line-height: 1.65;
-    color: #ffe4e6;
-    text-align: center;
-    font-style: italic;
-    letter-spacing: 0.1px;
-}
-
-.alex-signature-tribute {
-    font-family: 'Alex Brush', cursive;
-    font-size: clamp(2.5rem, 2.8rem + 0.8vh, 3.8rem);
-    color: #fca5a5;
-    text-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
-    margin-top: 1.5vh;
+.celestial-next-action-btn.horizontal-mesh-btn:active {
+    background: #fcd34d;
+    color: #020617;
+    box-shadow: 0 0 15px rgba(252, 211, 77, 0.5);
 }
 
 /* ==========================================================================
-   11. Overlays & Dialogue Boxes
+   8. Birthday Finale Typography & Signatures
    ========================================================================== */
+.birthday-title-glow { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 1.9rem + 0.6vh, 2.6rem); font-weight: 600; color: #fff1f2; animation: roseGlowPulse 2.5s ease-in-out infinite alternate; }
+@keyframes roseGlowPulse { 0% { text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); } 100% { text-shadow: 0 0 25px rgba(244, 63, 94, 0.9); } }
+.birthday-letter-body { font-family: 'Crimson Text', serif; font-size: clamp(1.05rem, 1.1rem + 0.2vh, 1.4rem); line-height: 1.65; color: #ffe4e6; font-style: italic; }
+.alex-signature-tribute { font-family: 'Alex Brush', cursive; font-size: clamp(2.4rem, 2.7rem + 0.6vh, 3.6rem); color: #fca5a5; margin-top: 1vh; }
+
+/* Overlays Framework Base Rules */
 .interaction-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .interaction-overlay.show { opacity: 1; pointer-events: auto; }
-#emoji-popup-overlay { background: rgba(2, 4, 10, 0.5); backdrop-filter: blur(4px); }
-#custom-alert-overlay { background: rgba(2, 4, 10, 0.8); backdrop-filter: blur(6px); }
-.alert-modal-card { background: #0f172a; border: 2px solid #ea580c; padding: 3.5vh 4vw; border-radius: 24px; max-width: 380px; width: 88%; text-align: center; box-shadow: 0 35px 75px rgba(0,0,0,0.85); animation: modalPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-@keyframes modalPopIn { 0% { transform: scale(0.75); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-.modal-emoji { font-size: 3.8rem; margin-bottom: 1.5vh; }
-.modal-odia-text { font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 600; color: #f8fafc; line-height: 1.5; margin-bottom: 1vh; }
-.modal-score-text { font-family: 'Crimson Text', serif; font-size: 1.05rem; color: #9ca3af; font-style: italic; }
-.giant-pop-symbol { font-size: 8rem; animation: pulseEmoji 0.5s ease infinite alternate; }
+#custom-alert-overlay { background: rgba(1, 2, 5, 0.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.alert-modal-card { background: #090d16; border: 1px solid rgba(234, 88, 12, 0.4); padding: 4vh 6vw; border-radius: 24px; max-width: 350px; width: 85%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
+.modal-emoji { font-size: 3.5rem; margin-bottom: 1vh; }
+.modal-odia-text { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: #f8fafc; line-height: 1.4; margin-bottom: 0.5vh; }
+.modal-score-text { font-family: 'Crimson Text', serif; font-size: 1rem; color: #9ca3af; }
+.giant-pop-symbol { font-size: 7rem; }

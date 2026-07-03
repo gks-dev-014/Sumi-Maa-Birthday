@@ -17,7 +17,6 @@ let isEntranceSequenceActive = false;
 let activePageContext = 1; 
 let isDrawingMode = false;
 let isDrawingStrokeActive = false; 
-let systemLock = false;
 
 let drawnHeartPoints = [];
 
@@ -46,6 +45,9 @@ function switchAppScene(targetSceneNumber) {
     activePageContext = targetSceneNumber;
     document.querySelectorAll('.view-screen').forEach(sec => sec.classList.add('hidden-layer', 'display-none'));
 
+    // Pause any active inline playing video elements when leaving media section views
+    document.querySelectorAll('video').forEach(vid => { try { vid.pause(); } catch(e){} });
+
     if (targetSceneNumber === 2) {
         fgCanvas.style.zIndex = "1"; fgCanvas.style.opacity = "0"; fgClouds = []; 
         const drawView = document.getElementById('view-section-2');
@@ -53,106 +55,44 @@ function switchAppScene(targetSceneNumber) {
         setTimeout(() => drawView.classList.remove('hidden-layer'), 50);
         setupDrawingCanvas();
     } 
-    else if (targetSceneNumber === 3) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const memoriesView = document.getElementById('view-section-3');
-        memoriesView.classList.remove('display-none');
-        setTimeout(() => memoriesView.classList.remove('hidden-layer'), 50);
-        parseTextParagraphIntoSpans('mehndi-story');
-    }
-    else if (targetSceneNumber === 4) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const galleryView = document.getElementById('view-section-4');
-        galleryView.classList.remove('display-none');
-        setTimeout(() => galleryView.classList.remove('hidden-layer'), 50);
-        setTimeout(() => { if (activePageContext === 4) switchAppScene(5); }, 5000);
-    }
-    else if (targetSceneNumber === 5) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const musicView = document.getElementById('view-section-5');
-        musicView.classList.remove('display-none');
-        setTimeout(() => musicView.classList.remove('hidden-layer'), 50);
-        parseTextParagraphIntoSpans('music-story');
-    }
-    else if (targetSceneNumber === 6) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const cookingView = document.getElementById('view-section-6');
-        cookingView.classList.remove('display-none');
-        setTimeout(() => cookingView.classList.remove('hidden-layer'), 50);
-        parseTextParagraphIntoSpans('cooking-story');
-    }
-    else if (targetSceneNumber === 7) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const foodGridView = document.getElementById('view-section-7');
-        foodGridView.classList.remove('display-none');
-        setTimeout(() => foodGridView.classList.remove('hidden-layer'), 50);
-        setTimeout(() => { if (activePageContext === 7) switchAppScene(8); }, 5000);
-    }
-    else if (targetSceneNumber === 8) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const timeView = document.getElementById('view-section-8');
-        timeView.classList.remove('display-none');
-        setTimeout(() => timeView.classList.remove('hidden-layer'), 50);
-        parseTextParagraphIntoSpans('time-story', 'great.');
-    }
-    else if (targetSceneNumber === 9) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const timeGridView = document.getElementById('view-section-9');
-        timeGridView.classList.remove('display-none');
-        setTimeout(() => timeGridView.classList.remove('hidden-layer'), 50);
-        setTimeout(() => { if (activePageContext === 9) switchAppScene(10); }, 5000);
-    }
-    else if (targetSceneNumber === 10) {
-        fgCanvas.style.zIndex = "1"; fgCanvas.style.opacity = "0"; fgClouds = [];
-        const videoTheaterView = document.getElementById('view-section-10');
-        videoTheaterView.classList.remove('display-none');
-        setTimeout(() => videoTheaterView.classList.remove('hidden-layer'), 50);
-        setupVideoPlayerPlaylistControls();
-    }
-    else if (targetSceneNumber === 11) {
-        fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1"; initSparseAmbientFlowers();
-        const appreciationView = document.getElementById('view-section-11');
-        appreciationView.classList.remove('display-none');
-        setTimeout(() => appreciationView.classList.remove('hidden-layer'), 50);
-        parseTextParagraphIntoSpans('appreciation-story', 'forever');
-    }
-    else if (targetSceneNumber === 12) {
+    else {
         fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1";
-        // ACTION: Restores the dense flower curtain layout grid setup
-        initBirthdayFlowerCurtain(); 
-        currentGlobalClearance = 0;
-        const birthdayRevealView = document.getElementById('view-section-12');
-        birthdayRevealView.classList.remove('display-none');
-        setTimeout(() => birthdayRevealView.classList.remove('hidden-layer'), 50);
+        
+        if (targetSceneNumber === 12) {
+            // FINALE ARCHITECTURE: Triggers true dense flower cover nodes precisely on entering scene 12
+            initBirthdayFlowerCurtain();
+            currentGlobalClearance = 0;
+        } else {
+            initSparseAmbientFlowers();
+        }
+
+        const targetView = document.getElementById(`view-section-${targetSceneNumber}`);
+        if (targetView) {
+            targetView.classList.remove('display-none');
+            setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
+        }
+
+        // Parse explicit string paragraphs safely into high-performance spans
+        if (targetSceneNumber === 3) parseTextParagraphIntoSpans('mehndi-story');
+        if (targetSceneNumber === 5) parseTextParagraphIntoSpans('music-story');
+        if (targetSceneNumber === 6) parseTextParagraphIntoSpans('cooking-story');
+        if (targetSceneNumber === 8) parseTextParagraphIntoSpans('time-story', 'u.');
+        if (targetSceneNumber === 11) parseTextParagraphIntoSpans('appreciation-story', '🌟');
     }
-}
-
-function setupVideoPlayerPlaylistControls() {
-    const player = document.getElementById('custom-theater-stream');
-    const buttons = document.querySelectorAll('.playlist-btn');
-    const nextBtn = document.getElementById('video-next-trigger');
-    if(!player) return;
-
-    if (nextBtn) {
-        nextBtn.onclick = () => { player.pause(); switchAppScene(11); };
-        nextBtn.ontouchstart = (e) => { e.stopPropagation(); player.pause(); switchAppScene(11); };
-    }
-
-    buttons.forEach(btn => {
-        const loadTrack = () => { buttons.forEach(b => b.classList.remove('active-track')); btn.classList.add('active-track'); player.src = btn.getAttribute('data-src'); player.load(); player.play().catch(() => {}); };
-        btn.onclick = loadTrack; btn.ontouchstart = (e) => { e.stopPropagation(); loadTrack(); };
-    });
 }
 
 // ==========================================================================
-// Cloud Architecture Framework Models
+// Deep 3D Layered Volumetric Cloud Rendering Models
 // ==========================================================================
 class ImmersiveCloudNode {
     constructor(x, y, customVy = 0, isAmbient = false) {
         this.x = x; this.y = y; this.isAmbient = isAmbient; this.isFlownAway = customVy > 0;
         this.zFactor = isAmbient ? (Math.random() * 0.4 + 0.3) : Math.random() * 0.7 + 0.3; 
-        this.vx = isAmbient ? (Math.random() * 0.22 + 0.18) : (Math.random() - 0.5) * 0.4 * (this.zFactor * 1.5);
+        
+        // WIND ENGINE LIFT: Continuous horizontal drifting speeds set across launch state cycles
+        this.vx = isAmbient ? (Math.random() * 0.22 + 0.18) : (Math.random() * 0.08 + 0.05) * this.zFactor;
         this.vy = customVy * (this.zFactor * 1.2); 
+        
         this.baseSize = isAmbient ? (Math.random() * 60 + 80) : (Math.random() * 55 + 65);
         this.size = this.baseSize * (this.zFactor * 1.8); 
         this.opacity = isAmbient ? (Math.random() * 0.08 + 0.06) : (Math.random() * 0.3 + 0.65) * (1.3 - this.zFactor);
@@ -169,117 +109,73 @@ class ImmersiveCloudNode {
     }
     update() {
         this.x += this.vx; this.y += this.vy;
+        
         if (mouse.active && !isTransitioningOut && !this.isAmbient) {
             const dx = this.x - mouse.x; const dy = this.y - mouse.y; const distance = Math.sqrt(dx * dx + dy * dy); const forceRadius = 150; 
-            if (distance < forceRadius) { this.isFlownAway = true; const angle = Math.atan2(dy, dx); const pushForce = (forceRadius - distance) / forceRadius; this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25; this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25; }
+            if (distance < forceRadius) { 
+                this.isFlownAway = true; 
+                const angle = Math.atan2(dy, dx); 
+                const pushForce = (forceRadius - distance) / forceRadius; 
+                this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25; 
+                this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25; 
+            }
         }
+        
         if (this.isFlownAway) {
             this.vx *= 0.94; this.vy *= 0.94; this.opacity -= 0.015; 
-            if (this.opacity <= 0 || this.y > fgCanvas.height + this.size) {
-                if (isEntranceSequenceActive) return; 
-                if (this.isAmbient) { this.x = Math.random() * bgCanvas.width; this.y = Math.random() * bgCanvas.height; this.vx = (Math.random() - 0.5) * 0.3; this.vy = 0; this.opacity = this.baseOpacity; this.isFlownAway = false; }
+        } else {
+            if (this.x - this.size > fgCanvas.width) {
+                this.x = -this.size;
+                this.y = Math.random() * fgCanvas.height;
             }
         }
     }
 }
 
 // ==========================================================================
-// Celestial Flying Flower Blossom Particle System (WEIGHTLESS FADE CLEAN)
+// Weightless Flower Blossom Particle System (FINALE SWIPE CLEAN)
 // ==========================================================================
 class CelestialFlowerBlossom {
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
+        this.x = x; this.y = y;
         this.zFactor = Math.random() * 0.6 + 0.4;
         this.size = (Math.random() * 22 + 20) * this.zFactor; 
         this.opacity = Math.random() * 0.2 + 0.75; 
         this.isFlownAway = false;
         
-        // Weightless drift velocities matching the cloud layer sweep rules
         this.vx = (Math.random() - 0.5) * 0.4 * (this.zFactor * 1.5);
         this.vy = 0;
-        
         this.rotation = Math.random() * Math.PI * 2;
         this.rotSpeed = (Math.random() - 0.5) * 0.01;
         this.hueType = Math.random() > 0.45 ? 'rose' : 'cream';
     }
-
     draw(context) {
         if (this.opacity <= 0) return;
-        context.save();
-        context.translate(this.x, this.y);
-        context.rotate(this.rotation);
-        context.globalAlpha = this.opacity;
-
-        context.shadowColor = 'rgba(15, 2, 5, 0.4)';
-        context.shadowBlur = 8;
-        context.shadowOffsetX = 3;
-        context.shadowOffsetY = 4;
-
-        const petals = 5;
-        context.beginPath();
-        for (let i = 0; i < petals; i++) {
-            context.rotate((Math.PI * 2) / petals);
-            context.moveTo(0, 0);
-            context.bezierCurveTo(-this.size * 0.6, -this.size * 0.4, -this.size * 0.5, -this.size * 1.2, 0, -this.size);
-            context.bezierCurveTo(this.size * 0.5, -this.size * 1.2, this.size * 0.6, -this.size * 0.4, 0, 0);
+        context.save(); context.translate(this.x, this.y); context.rotate(this.rotation); context.globalAlpha = this.opacity;
+        context.shadowColor = 'rgba(15, 2, 5, 0.4)'; context.shadowBlur = 8; context.shadowOffsetX = 3; context.shadowOffsetY = 4;
+        const petals = 5; context.beginPath();
+        for (let i = 0; i < petals; i++) { context.rotate((Math.PI * 2) / petals); context.moveTo(0, 0); context.bezierCurveTo(-this.size * 0.6, -this.size * 0.4, -this.size * 0.5, -this.size * 1.2, 0, -this.size); context.bezierCurveTo(this.size * 0.5, -this.size * 1.2, this.size * 0.6, -this.size * 0.4, 0, 0); }
+        
+        if (this.hueType === 'rose') { 
+            let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size); 
+            flowerGrad.addColorStop(0, '#ffe4e6'); flowerGrad.addColorStop(0.3, '#f43f5e'); flowerGrad.addColorStop(1, '#be123c'); 
+            context.fillStyle = flowerGrad; 
+        } else { 
+            let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size); 
+            flowerGrad.addColorStop(0, '#ffffff'); flowerGrad.addColorStop(0.6, '#ffe4e6'); flowerGrad.addColorStop(1, '#fda4af'); 
+            context.fillStyle = flowerGrad; 
         }
-
-        if (this.hueType === 'rose') {
-            let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size);
-            flowerGrad.addColorStop(0, '#ffe4e6'); 
-            flowerGrad.addColorStop(0.3, '#f43f5e'); 
-            flowerGrad.addColorStop(1, '#be123c'); 
-            context.fillStyle = flowerGrad;
-        } else {
-            let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size);
-            flowerGrad.addColorStop(0, '#ffffff');
-            flowerGrad.addColorStop(0.6, '#ffe4e6');
-            flowerGrad.addColorStop(1, '#fda4af');
-            context.fillStyle = flowerGrad;
-        }
-        context.fill();
-
-        context.shadowColor = 'transparent';
-        let centerGlow = context.createRadialGradient(0, 0, 0, 0, 0, this.size * 0.22);
-        centerGlow.addColorStop(0, '#fcd34d');
-        centerGlow.addColorStop(0.7, '#f59e0b');
-        centerGlow.addColorStop(1, 'rgba(245, 158, 11, 0)');
-        context.fillStyle = centerGlow;
-        context.beginPath();
-        context.arc(0, 0, this.size * 0.22, 0, Math.PI * 2);
-        context.fill();
-
-        context.restore();
+        context.fill(); context.shadowColor = 'transparent';
+        
+        let centerGlow = context.createRadialGradient(0, 0, 0, 0, 0, this.size * 0.22); centerGlow.addColorStop(0, '#fcd34d'); centerGlow.addColorStop(0.7, '#f59e0b'); centerGlow.addColorStop(1, 'rgba(245, 158, 11, 0)'); context.fillStyle = centerGlow; context.beginPath(); context.arc(0, 0, this.size * 0.22, 0, Math.PI * 2); context.fill(); context.restore();
     }
-
     update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.rotation += this.rotSpeed;
-
+        this.x += this.vx; this.y += this.vy; this.rotation += this.rotSpeed;
         if (mouse.active && !this.isFlownAway) {
-            const dx = this.x - mouse.x;
-            const dy = this.y - mouse.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const forceRadius = 150; 
-
-            if (distance < forceRadius) {
-                this.isFlownAway = true;
-                const angle = Math.atan2(dy, dx);
-                const pushForce = (forceRadius - distance) / forceRadius;
-                
-                // Sweeps outward cleanly with fluid kinetic displacement matching the clouds
-                this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25;
-                this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25;
-            }
+            const dx = this.x - mouse.x; const dy = this.y - mouse.y; const distance = Math.sqrt(dx * dx + dy * dy); const forceRadius = 150; 
+            if (distance < forceRadius) { this.isFlownAway = true; const angle = Math.atan2(dy, dx); const pushForce = (forceRadius - distance) / forceRadius; this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25; this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25; }
         }
-
-        if (this.isFlownAway) {
-            this.vx *= 0.94;
-            this.vy *= 0.94;
-            this.opacity -= 0.015; // Clean slow fade-out dissolve
-        }
+        if (this.isFlownAway) { this.vx *= 0.94; this.vy *= 0.94; this.opacity -= 0.015; }
     }
 }
 
@@ -291,7 +187,6 @@ class CosmicShootingStar {
 }
 
 function initDenseForegroundClouds() { fgClouds = []; const spacing = 28; for (let x = -50; x < fgCanvas.width + 50; x += spacing) { for (let y = -50; y < fgCanvas.height + 50; y += spacing) { fgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*22, y + (Math.random()-0.5)*22)); } } fgClouds.sort((a, b) => a.zFactor - b.zFactor); }
-/* Spacing density configured strictly to produce an ultra-dense bouquet curtain mask cover */
 function initBackgroundAmbientMists() { bgClouds = []; const spacing = 75; for (let x = -60; x < bgCanvas.width + 60; x += spacing) { for (let y = 0; y < bgCanvas.height; y += spacing) { bgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*35, y + (Math.random()-0.5)*35, 0, true)); } } }
 function initSparseAmbientFlowers() { isEntranceSequenceActive = false; fgClouds = []; const spacing = 120; for (let x = 40; x < fgCanvas.width; x += spacing) { for (let y = 40; y < fgCanvas.height; y += spacing) { fgClouds.push(new ImmersiveCloudNode(x + (Math.random()-0.5)*40, y + (Math.random()-0.5)*40, 0, true)); } } }
 
@@ -355,11 +250,6 @@ function handleFingerSlideAction(e) {
         const txt = hitNode.innerText;
         if ((txt.includes('🤭') || txt.includes('😊')) && activePageContext === 5) switchAppScene(6);
     } 
-    else if (hitNode && hitNode.classList.contains('interactive-symbol')) {
-        const txt = hitNode.innerText;
-        if (txt.includes('❤️') && activePageContext === 3) switchAppScene(4);
-        else if (txt.includes('🥰') && activePageContext === 6) switchAppScene(7);
-    }
 }
 
 window.addEventListener('touchmove', handleFingerSlideAction, { passive: false });
@@ -374,11 +264,8 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
         
         if (word.includes('🤭') || word.includes('😊') || word.includes('😂')) {
             span.innerText = word; span.classList.add('interactive-emoji');
-            if (paragraphId === 'music-story') span.addEventListener('mouseenter', () => { if(activePageContext === 5) switchAppScene(6); });
         } else if (word.includes('❤️') || word.includes('🥰') || word.includes('🙏') || word.includes('🌟')) {
             span.innerText = word; span.classList.add('interactive-symbol'); 
-            if (word.includes('❤️')) span.addEventListener('mouseenter', () => { if(activePageContext === 3) switchAppScene(4); });
-            if (word.includes('🥰')) span.addEventListener('mouseenter', () => { if(activePageContext === 6) switchAppScene(7); });
         } else {
             span.classList.add('interactive-word');
             span.addEventListener('mouseenter', () => { if (pType !== 'intro' || currentGlobalClearance > 85) span.classList.add('active-touch'); });
@@ -387,11 +274,9 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
             if (terminalMatchKey && word.toLowerCase().includes(terminalMatchKey)) { 
                 if (paragraphId === 'time-story') {
                     span.classList.add('terminal-time-trigger');
-                    span.addEventListener('mouseenter', () => { if(activePageContext === 8) switchAppScene(9); });
                 } 
                 else if (paragraphId === 'appreciation-story') {
                     span.classList.add('terminal-appreciation-trigger');
-                    span.addEventListener('mouseenter', () => { if(activePageContext === 11) switchAppScene(12); });
                 }
                 else {
                     span.classList.add('terminal-trigger-word'); 
