@@ -10,6 +10,7 @@ body, html {
     height: 100%;
     overflow: hidden;
     background-color: #010204; 
+    font-family: 'Poppins', sans-serif;
 }
 
 #app-view-container {
@@ -17,7 +18,7 @@ body, html {
     height: 100%;
     position: relative;
     opacity: 0;
-    transition: opacity 1.5s ease-in-out;
+    transition: opacity 1.2s ease-in-out;
 }
 
 #app-view-container.sky-initialized {
@@ -33,16 +34,16 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2vh 4vw; 
+    padding: 20px 16px; 
     z-index: 5; 
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-.hidden-layer { opacity: 0; pointer-events: none; transform: scale(0.95) translateY(20px); }
+.hidden-layer { opacity: 0; pointer-events: none; transform: scale(0.97) translateY(15px); }
 .display-none { display: none !important; }
 
 /* ==========================================================================
-   2. Celestial Backdrop Architecture
+   2. Celestial Backdrop Architecture (Twinkling Fix)
    ========================================================================== */
 #sky-environment {
     position: absolute;
@@ -59,13 +60,14 @@ body, html {
     position: absolute;
     background-color: #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 1);
+    will-change: transform, opacity; /* Forces Android GPU acceleration track */
     animation: smoothGlow infinite alternate ease-in-out;
 }
 
 @keyframes smoothGlow {
-    0% { opacity: 0.2; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1.3); }
+    0% { opacity: 0.15; transform: scale(0.7) translate3d(0,0,0); }
+    100% { opacity: 1; transform: scale(1.2) translate3d(0,0,0); }
 }
 
 /* ==========================================================================
@@ -93,11 +95,11 @@ body, html {
 #fg-cloud-canvas.allow-clicks { pointer-events: none; }
 
 /* ==========================================================================
-   4. Glassmorphic Luxury Message Container Modules
+   4. Glassmorphic Luxury Message Container Modules (Typography Fix)
    ========================================================================== */
 .content-viewport-capsule {
     width: 100%;
-    max-width: 620px;
+    max-width: 580px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -109,115 +111,131 @@ body, html {
     text-align: center;
     width: 100%;
     max-height: 85vh; 
-    padding: 3.5vh 5vw;
-    background: rgba(4, 8, 20, 0.3); 
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.1);
-    border-radius: 28px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    padding: 30px 24px;
+    background: rgba(6, 11, 28, 0.4); 
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     z-index: 3; 
     overflow-y: auto; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2.5vh; 
+    gap: 20px; 
 }
 
-.box-page1 { border-color: rgba(255, 255, 255, 0.06); }
-.box-mehndi { border-color: rgba(245, 158, 11, 0.2); background: rgba(18, 12, 6, 0.35); }
-.box-music { border-color: rgba(147, 197, 253, 0.2); background: rgba(8, 14, 28, 0.35); }
-.box-cooking { border-color: rgba(251, 146, 60, 0.2); background: rgba(20, 12, 8, 0.35); }
-.box-time { border-color: rgba(52, 211, 153, 0.2); background: rgba(6, 20, 14, 0.35); }
-.box-appreciation { border-color: rgba(244, 63, 94, 0.2); background: rgba(24, 8, 14, 0.35); }
+.box-page1 { border-color: rgba(255, 255, 255, 0.08); }
+.box-mehndi { border-color: rgba(245, 158, 11, 0.25); background: rgba(22, 14, 8, 0.4); }
+.box-music { border-color: rgba(147, 197, 253, 0.25); background: rgba(8, 15, 32, 0.4); }
+.box-cooking { border-color: rgba(251, 146, 60, 0.25); background: rgba(24, 15, 10, 0.4); }
+.box-time { border-color: rgba(52, 211, 153, 0.25); background: rgba(6, 22, 15, 0.4); }
+.box-appreciation { border-color: rgba(244, 63, 94, 0.25); background: rgba(26, 8, 14, 0.4); }
 
 .box-birthday-reveal {
-    border-color: rgba(244, 63, 94, 0.35);
-    background: rgba(28, 6, 10, 0.45);
-    box-shadow: 0 35px 80px rgba(244, 63, 94, 0.25), inset 0 1px 3px rgba(251, 113, 133, 0.2);
+    border-color: rgba(244, 63, 94, 0.4);
+    background: rgba(32, 6, 12, 0.5);
+    box-shadow: 0 30px 75px rgba(244, 63, 94, 0.3), inset 0 1px 3px rgba(251, 113, 133, 0.25);
 }
 
-/* Typography Matrix Profiles */
 .quote { 
     font-family: 'Playfair Display', serif; 
-    font-size: clamp(1.1rem, 1.15rem + 0.4vh, 1.55rem); 
+    font-size: clamp(1.1rem, 1.15rem + 0.3vh, 1.45rem); 
     font-style: italic; 
-    line-height: 1.55; 
+    line-height: 1.6; 
     color: #f8fafc; 
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
 
 .maa-signature { 
     font-family: 'Alex Brush', cursive; 
-    font-size: clamp(2.3rem, 2.5rem + 0.6vh, 3.4rem); 
+    font-size: clamp(2.4rem, 2.6rem + 0.6vh, 3.4rem); 
     color: #fda4af; 
-    text-shadow: 0 0 15px rgba(253, 164, 175, 0.4);
+    display: inline-block;
+    text-shadow: 0 0 15px rgba(253, 164, 175, 0.5);
 }
 
 .memory-title { 
     font-family: 'Playfair Display', serif; 
-    font-size: clamp(1.25rem, 1.35rem + 0.3vh, 1.9rem); 
+    font-size: clamp(1.25rem, 1.35rem + 0.3vh, 1.8rem); 
     font-weight: 600; 
     color: #fcd34d; 
-    text-shadow: 0 2px 12px rgba(252, 211, 77, 0.2);
+    text-shadow: 0 2px 10px rgba(252, 211, 77, 0.3);
 }
 
 .story-paragraph { 
     font-family: 'Crimson Text', serif; 
-    font-size: clamp(1rem, 1.02rem + 0.25vh, 1.35rem); 
-    line-height: 1.6; 
-    color: #cbd5e1; 
+    font-size: clamp(1.05rem, 1.08rem + 0.2vh, 1.35rem); 
+    line-height: 1.65; 
+    color: #e2e8f0; 
 }
 
-/* Interactive Spans */
-.interactive-word { display: inline-block; transition: transform 0.2s ease, color 0.2s; padding: 0 1px; }
-.interactive-word.active-touch { transform: scale(1.1) translateY(-1px); font-weight: 600; color: #f43f5e; text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
-.box-mehndi .interactive-word.active-touch { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
-.box-cooking .interactive-word.active-touch { color: #fb923c; text-shadow: 0 0 10px rgba(251, 146, 60, 0.4); }
-.box-time .interactive-word.active-touch { color: #34d399; text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
+/* Touch Highlights Stylizations */
+.interactive-word { 
+    display: inline-block; 
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s; 
+    padding: 0 1px; 
+}
+.interactive-word.active-touch { 
+    transform: scale(1.1) translateY(-1px); 
+    font-weight: 600; 
+    color: #f43f5e; 
+    text-shadow: 0 0 8px rgba(244, 63, 94, 0.5);
+}
+.box-mehndi .interactive-word.active-touch { color: #fbbf24; text-shadow: 0 0 8px rgba(251, 191, 36, 0.5); }
+.box-cooking .interactive-word.active-touch { color: #fb923c; text-shadow: 0 0 8px rgba(251, 146, 60, 0.5); }
+.box-time .interactive-word.active-touch { color: #34d399; text-shadow: 0 0 8px rgba(52, 211, 153, 0.5); }
 
-.interactive-symbol, .interactive-emoji { display: inline-block; padding: 0 1px; }
+.interactive-symbol, .interactive-emoji { display: inline-block; padding: 0 2px; }
 
-/* Icons */
-.music-icon-glow, .cooking-icon-glow, .time-icon-glow, .appreciation-icon-glow { font-size: 3rem; animation: iconFloat 2.5s ease-in-out infinite alternate; }
-@keyframes iconFloat { 0% { transform: translateY(0) scale(0.96); } 100% { transform: translateY(-5px) scale(1.04); } }
+.music-icon-glow, .cooking-icon-glow, .time-icon-glow, .appreciation-icon-glow {
+    font-size: 2.8rem;
+    animation: iconFloat 2.5s ease-in-out infinite alternate;
+}
+@keyframes iconFloat {
+    0% { transform: translateY(0) scale(0.95); }
+    100% { transform: translateY(-4px) scale(1.05); }
+}
 
 /* ==========================================================================
-   5. Action Buttons & Bounding Core Control Loops
+   5. Action Buttons Control Elements (Android Fix)
    ========================================================================== */
 .celestial-next-action-btn {
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(0.85rem, 0.88rem + 0.1vh, 1.05rem);
+    font-size: clamp(0.85rem, 0.88rem + 0.1vh, 1rem);
     font-weight: 600;
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 10px 32px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 36px;
     border-radius: 14px;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+    margin-top: 5px;
 }
 .celestial-next-action-btn:active {
     background: #ffffff;
     color: #020617;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    transform: scale(0.98);
 }
 
 /* ==========================================================================
-   6. Drawing Layer Configuration
+   6. Hand-Outline Drawing Layer Stack
    ========================================================================== */
 .drawing-layout-stack { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; width: 100%; }
-.drawing-instruction-text { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 1.15rem + 0.3vh, 1.45rem); font-style: italic; color: #f1f5f9; text-align: center; max-width: 90%; }
-.canvas-wrapper { position: relative; width: min(290px, 76vw); height: min(410px, 70vh); background: radial-gradient(circle at 50% 40%, #ffffff 0%, #e2e8f0 100%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 32px; box-shadow: 0 25px 55px rgba(0, 0, 0, 0.5); }
+.drawing-instruction-text { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 1.15rem + 0.2vh, 1.4rem); font-style: italic; color: #f1f5f9; text-align: center; max-width: 90%; }
+.canvas-wrapper { position: relative; width: min(285px, 75vw); height: min(400px, 68vh); background: radial-gradient(circle at 50% 40%, #ffffff 0%, #e2e8f0 100%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 32px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6); }
 #hand-outline { position: absolute; top: 6%; left: 6%; width: 88%; height: 88%; z-index: 1; pointer-events: none; }
 #draw-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; cursor: crosshair; }
 
 /* ==========================================================================
-   7. Media Grids & Polaroid Formatting
+   7. Media Grids & Polaroid Formatting (Fit Contain Fix)
    ========================================================================== */
 .gallery-viewport-capsule { 
     display: flex; 
@@ -226,46 +244,33 @@ body, html {
     justify-content: center; 
     width: 100%; 
     max-width: 650px; 
-    gap: 2.5vh; 
+    gap: 2vh; 
 }
-
-/* MODIFIED: Section 9 wrapper is configured to maximize safe single-page area */
-.gallery-viewport-capsule.structural-dense-override {
-    max-height: 95vh;
-}
+.gallery-viewport-capsule.structural-dense-override { max-height: 95vh; }
 
 .gallery-title-header { 
     font-family: 'Playfair Display', serif; 
-    font-size: clamp(1.4rem, 1.5rem + 0.3vh, 2.1rem); 
+    font-size: clamp(1.35rem, 1.45rem + 0.25vh, 2rem); 
     font-weight: 600; 
     color: #fcd34d; 
     text-align: center; 
+    margin-bottom: 5px;
 }
 
 .photos-flex-grid { 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    gap: 3.5vw; 
+    gap: 4vw; 
     width: 100%; 
 }
 
-.photos-flex-grid.grid-2x2 { 
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 2vh 3vw; 
-    max-width: 500px; 
-}
-
-/* ==========================================================================
-   NEW: Real-time Multi-Dimensional Hybrid Mesh (SECTION 9 INTERVENTION)
-   ========================================================================== */
 .photos-hybrid-action-mesh {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.8vh 2.5vw;
+    gap: 1.5vh 3vw;
     width: 100%;
-    max-width: 480px;
+    max-width: 460px;
     align-items: center;
 }
 
@@ -274,26 +279,21 @@ body, html {
     border: 1px solid rgba(255, 255, 255, 0.12); 
     padding: 10px; 
     border-radius: 18px; 
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    width: 100%;
+    width: min(240px, 44vw); 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
     gap: 1vh; 
 }
-
-/* Strict scaling overrides to lock contents inside smaller screens */
-.celestial-photo-frame.mini-frame { 
-    padding: 8px; 
-    border-radius: 14px; 
-}
+.celestial-photo-frame.mini-frame { width: 100%; padding: 8px; border-radius: 14px; }
 
 .photo-image-placeholder { 
     width: 100%; 
     aspect-ratio: 4/5; 
-    background: radial-gradient(circle at 50% 50%, #0c111d 0%, #020408 100%); 
+    background: #060914; 
     border-radius: 10px; 
     display: flex; 
     justify-content: center; 
@@ -307,63 +307,44 @@ body, html {
     object-fit: cover; 
 }
 
-/* Video element explicitly locked to scale perfectly inline inside grids */
-.photo-image-placeholder video {
-    max-height: 100%;
-    background: #000000;
-}
-
 .photo-caption-text { 
     font-family: 'Crimson Text', serif; 
-    font-size: clamp(0.9rem, 0.92rem + 0.1vh, 1.15rem); 
-    color: #e2e8f0; 
+    font-size: clamp(0.85rem, 0.9rem + 0.1vh, 1.1rem); 
+    color: #cbd5e1; 
     font-style: italic; 
     text-align: center; 
 }
 
-/* Action anchor box that dynamically transforms the button into a native grid cell */
 .action-grid-cell-anchor {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
 }
 
 .celestial-next-action-btn.horizontal-mesh-btn {
     width: 100%;
-    height: min(65px, 12vh);
+    height: 52px;
     margin-top: 0;
-    padding: 5px;
     border-radius: 14px;
-    background: linear-gradient(135deg, rgba(252, 211, 77, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
-    border-color: rgba(252, 211, 77, 0.3);
+    background: rgba(252, 211, 77, 0.1);
+    border-color: rgba(252, 211, 77, 0.35);
     color: #fcd34d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.celestial-next-action-btn.horizontal-mesh-btn:active {
-    background: #fcd34d;
-    color: #020617;
-    box-shadow: 0 0 15px rgba(252, 211, 77, 0.5);
 }
 
 /* ==========================================================================
-   8. Birthday Finale Typography & Signatures
+   8. Birthday Finale Presentation Rules
    ========================================================================== */
-.birthday-title-glow { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 1.9rem + 0.6vh, 2.6rem); font-weight: 600; color: #fff1f2; animation: roseGlowPulse 2.5s ease-in-out infinite alternate; }
-@keyframes roseGlowPulse { 0% { text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); } 100% { text-shadow: 0 0 25px rgba(244, 63, 94, 0.9); } }
-.birthday-letter-body { font-family: 'Crimson Text', serif; font-size: clamp(1.05rem, 1.1rem + 0.2vh, 1.4rem); line-height: 1.65; color: #ffe4e6; font-style: italic; }
-.alex-signature-tribute { font-family: 'Alex Brush', cursive; font-size: clamp(2.4rem, 2.7rem + 0.6vh, 3.6rem); color: #fca5a5; margin-top: 1vh; }
+.birthday-title-glow { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 1.8rem + 0.5vh, 2.4rem); font-weight: 600; color: #fff1f2; animation: roseGlowPulse 2s infinite alternate ease-in-out; }
+@keyframes roseGlowPulse { 0% { text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); } 100% { text-shadow: 0 0 20px rgba(244, 63, 94, 0.8); } }
+.birthday-letter-body { font-family: 'Crimson Text', serif; font-size: clamp(1rem, 1.05rem + 0.2vh, 1.35rem); line-height: 1.6; color: #ffe4e6; font-style: italic; }
+.alex-signature-tribute { font-family: 'Alex Brush', cursive; font-size: clamp(2.2rem, 2.5rem + 0.6vh, 3.4rem); color: #fca5a5; margin-top: 5px; }
 
-/* Overlays Framework Base Rules */
-.interaction-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.interaction-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; }
 .interaction-overlay.show { opacity: 1; pointer-events: auto; }
 #custom-alert-overlay { background: rgba(1, 2, 5, 0.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.alert-modal-card { background: #090d16; border: 1px solid rgba(234, 88, 12, 0.4); padding: 4vh 6vw; border-radius: 24px; max-width: 350px; width: 85%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
-.modal-emoji { font-size: 3.5rem; margin-bottom: 1vh; }
-.modal-odia-text { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 600; color: #f8fafc; line-height: 1.4; margin-bottom: 0.5vh; }
-.modal-score-text { font-family: 'Crimson Text', serif; font-size: 1rem; color: #9ca3af; }
-.giant-pop-symbol { font-size: 7rem; }
+.alert-modal-card { background: #090d16; border: 1px solid rgba(234, 88, 12, 0.4); padding: 24px; border-radius: 20px; max-width: 320px; width: 85%; text-align: center; }
+.modal-emoji { font-size: 3.2rem; margin-bottom: 5px; }
+.modal-odia-text { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: #f8fafc; line-height: 1.4; }
+.modal-score-text { font-family: 'Crimson Text', serif; font-size: 0.95rem; color: #9ca3af; }

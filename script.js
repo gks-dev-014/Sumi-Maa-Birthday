@@ -20,15 +20,15 @@ let isDrawingStrokeActive = false;
 
 let drawnHeartPoints = [];
 
-// Gentle, Super-Slow 2D Bounding Box Floating Moon Engine
+// Gentle, Super-Slow 2D Bounding Box Floating Moon Engine (Drifting Fix)
 let cosmicMoon = {
-    x: 0, y: 0, radius: 65, vx: 0.03, vy: 0.015, 
+    x: 0, y: 0, radius: 55, vx: 0.03, vy: 0.015, 
     init() { this.x = bgCanvas.width * 0.5; this.y = bgCanvas.height * 0.25; this.vx = 0.03; this.vy = 0.015; },
     draw() {
         bgCtx.save();
         let glowGradient = bgCtx.createRadialGradient(this.x, this.y, this.radius * 0.05, this.x, this.y, this.radius * 2.2);
         glowGradient.addColorStop(0, '#fffdf0'); glowGradient.addColorStop(0.2, '#fffcf0');
-        glowGradient.addColorStop(0.4, 'rgba(255, 244, 204, 0.2)'); glowGradient.addColorStop(1, 'rgba(255, 254, 240, 0)');
+        glowGradient.addColorStop(0.4, 'rgba(255, 244, 204, 0.15)'); glowGradient.addColorStop(1, 'rgba(255, 254, 240, 0)');
         bgCtx.fillStyle = glowGradient; bgCtx.beginPath(); bgCtx.arc(this.x, this.y, this.radius * 2.2, 0, Math.PI * 2); bgCtx.fill();
         bgCtx.fillStyle = '#fffdf0'; bgCtx.beginPath(); bgCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); bgCtx.fill(); bgCtx.restore();
     },
@@ -37,7 +37,7 @@ let cosmicMoon = {
         if (this.x - this.radius <= 10) { this.x = this.radius + 10; this.vx *= -1; } 
         else if (this.x + this.radius >= bgCanvas.width - 10) { this.x = bgCanvas.width - this.radius - 10; this.vx *= -1; }
         if (this.y - this.radius <= 10) { this.y = this.radius + 10; this.vy *= -1; } 
-        else if (this.y + this.radius >= bgCanvas.height * 0.5) { this.y = bgCanvas.height * 0.5 - this.radius; this.vy *= -1; }
+        else if (this.y + this.radius >= bgCanvas.height * 0.45) { this.y = bgCanvas.height * 0.45 - this.radius; this.vy *= -1; }
     }
 };
 
@@ -45,7 +45,7 @@ function switchAppScene(targetSceneNumber) {
     activePageContext = targetSceneNumber;
     document.querySelectorAll('.view-screen').forEach(sec => sec.classList.add('hidden-layer', 'display-none'));
 
-    // Pause any active inline playing video elements when leaving media section views
+    // Secure cross-browser safety fallback loops for videos playing
     document.querySelectorAll('video').forEach(vid => { try { vid.pause(); } catch(e){} });
 
     if (targetSceneNumber === 2) {
@@ -57,9 +57,7 @@ function switchAppScene(targetSceneNumber) {
     } 
     else {
         fgCanvas.style.zIndex = "12"; fgCanvas.style.opacity = "1";
-        
         if (targetSceneNumber === 12) {
-            // FINALE ARCHITECTURE: Triggers true dense flower cover nodes precisely on entering scene 12
             initBirthdayFlowerCurtain();
             currentGlobalClearance = 0;
         } else {
@@ -72,7 +70,6 @@ function switchAppScene(targetSceneNumber) {
             setTimeout(() => targetView.classList.remove('hidden-layer'), 50);
         }
 
-        // Parse explicit string paragraphs safely into high-performance spans
         if (targetSceneNumber === 3) parseTextParagraphIntoSpans('mehndi-story');
         if (targetSceneNumber === 5) parseTextParagraphIntoSpans('music-story');
         if (targetSceneNumber === 6) parseTextParagraphIntoSpans('cooking-story');
@@ -82,17 +79,14 @@ function switchAppScene(targetSceneNumber) {
 }
 
 // ==========================================================================
-// Deep 3D Layered Volumetric Cloud Rendering Models
+// Cloud Architecture Framework Models
 // ==========================================================================
 class ImmersiveCloudNode {
     constructor(x, y, customVy = 0, isAmbient = false) {
         this.x = x; this.y = y; this.isAmbient = isAmbient; this.isFlownAway = customVy > 0;
         this.zFactor = isAmbient ? (Math.random() * 0.4 + 0.3) : Math.random() * 0.7 + 0.3; 
-        
-        // WIND ENGINE LIFT: Continuous horizontal drifting speeds set across launch state cycles
         this.vx = isAmbient ? (Math.random() * 0.22 + 0.18) : (Math.random() * 0.08 + 0.05) * this.zFactor;
         this.vy = customVy * (this.zFactor * 1.2); 
-        
         this.baseSize = isAmbient ? (Math.random() * 60 + 80) : (Math.random() * 55 + 65);
         this.size = this.baseSize * (this.zFactor * 1.8); 
         this.opacity = isAmbient ? (Math.random() * 0.08 + 0.06) : (Math.random() * 0.3 + 0.65) * (1.3 - this.zFactor);
@@ -109,40 +103,28 @@ class ImmersiveCloudNode {
     }
     update() {
         this.x += this.vx; this.y += this.vy;
-        
         if (mouse.active && !isTransitioningOut && !this.isAmbient) {
-            const dx = this.x - mouse.x; const dy = this.y - mouse.y; const distance = Math.sqrt(dx * dx + dy * dy); const forceRadius = 150; 
-            if (distance < forceRadius) { 
-                this.isFlownAway = true; 
-                const angle = Math.atan2(dy, dx); 
-                const pushForce = (forceRadius - distance) / forceRadius; 
-                this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25; 
-                this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25; 
-            }
+            const dx = this.x - mouse.x; const dy = this.y - mouse.y; const distance = Math.sqrt(dx * dx + dy * dy); const forceRadius = 140; 
+            if (distance < forceRadius) { this.isFlownAway = true; const angle = Math.atan2(dy, dx); const pushForce = (forceRadius - distance) / forceRadius; this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25; this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25; }
         }
-        
         if (this.isFlownAway) {
             this.vx *= 0.94; this.vy *= 0.94; this.opacity -= 0.015; 
         } else {
-            if (this.x - this.size > fgCanvas.width) {
-                this.x = -this.size;
-                this.y = Math.random() * fgCanvas.height;
-            }
+            if (this.x - this.size > fgCanvas.width) { this.x = -this.size; this.y = Math.random() * fgCanvas.height; }
         }
     }
 }
 
 // ==========================================================================
-// Weightless Flower Blossom Particle System (FINALE SWIPE CLEAN)
+// Celestial Flying Flower Blossom Particle System (WEIGHTLESS FADE CLEAN)
 // ==========================================================================
 class CelestialFlowerBlossom {
     constructor(x, y) {
         this.x = x; this.y = y;
-        this.zFactor = Math.random() * 0.6 + 0.4;
-        this.size = (Math.random() * 22 + 20) * this.zFactor; 
+        this.zFactor = Math.random() * 0.5 + 0.5;
+        this.size = (Math.random() * 20 + 18) * this.zFactor; 
         this.opacity = Math.random() * 0.2 + 0.75; 
         this.isFlownAway = false;
-        
         this.vx = (Math.random() - 0.5) * 0.4 * (this.zFactor * 1.5);
         this.vy = 0;
         this.rotation = Math.random() * Math.PI * 2;
@@ -152,27 +134,18 @@ class CelestialFlowerBlossom {
     draw(context) {
         if (this.opacity <= 0) return;
         context.save(); context.translate(this.x, this.y); context.rotate(this.rotation); context.globalAlpha = this.opacity;
-        context.shadowColor = 'rgba(15, 2, 5, 0.4)'; context.shadowBlur = 8; context.shadowOffsetX = 3; context.shadowOffsetY = 4;
+        context.shadowColor = 'rgba(15, 2, 5, 0.3)'; context.shadowBlur = 6; context.shadowOffsetX = 2; context.shadowOffsetY = 3;
         const petals = 5; context.beginPath();
         for (let i = 0; i < petals; i++) { context.rotate((Math.PI * 2) / petals); context.moveTo(0, 0); context.bezierCurveTo(-this.size * 0.6, -this.size * 0.4, -this.size * 0.5, -this.size * 1.2, 0, -this.size); context.bezierCurveTo(this.size * 0.5, -this.size * 1.2, this.size * 0.6, -this.size * 0.4, 0, 0); }
-        
-        if (this.hueType === 'rose') { 
-            let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size); 
-            flowerGrad.addColorStop(0, '#ffe4e6'); flowerGrad.addColorStop(0.3, '#f43f5e'); flowerGrad.addColorStop(1, '#be123c'); 
-            context.fillStyle = flowerGrad; 
-        } else { 
-            let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size); 
-            flowerGrad.addColorStop(0, '#ffffff'); flowerGrad.addColorStop(0.6, '#ffe4e6'); flowerGrad.addColorStop(1, '#fda4af'); 
-            context.fillStyle = flowerGrad; 
-        }
+        if (this.hueType === 'rose') { let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size); flowerGrad.addColorStop(0, '#ffe4e6'); flowerGrad.addColorStop(0.3, '#f43f5e'); flowerGrad.addColorStop(1, '#be123c'); context.fillStyle = flowerGrad; } 
+        else { let flowerGrad = context.createRadialGradient(0, 0, 0, 0, 0, this.size); flowerGrad.addColorStop(0, '#ffffff'); flowerGrad.addColorStop(0.6, '#ffe4e6'); flowerGrad.addColorStop(1, '#fda4af'); context.fillStyle = flowerGrad; }
         context.fill(); context.shadowColor = 'transparent';
-        
         let centerGlow = context.createRadialGradient(0, 0, 0, 0, 0, this.size * 0.22); centerGlow.addColorStop(0, '#fcd34d'); centerGlow.addColorStop(0.7, '#f59e0b'); centerGlow.addColorStop(1, 'rgba(245, 158, 11, 0)'); context.fillStyle = centerGlow; context.beginPath(); context.arc(0, 0, this.size * 0.22, 0, Math.PI * 2); context.fill(); context.restore();
     }
     update() {
         this.x += this.vx; this.y += this.vy; this.rotation += this.rotSpeed;
         if (mouse.active && !this.isFlownAway) {
-            const dx = this.x - mouse.x; const dy = this.y - mouse.y; const distance = Math.sqrt(dx * dx + dy * dy); const forceRadius = 150; 
+            const dx = this.x - mouse.x; const dy = this.y - mouse.y; const distance = Math.sqrt(dx * dx + dy * dy); const forceRadius = 140; 
             if (distance < forceRadius) { this.isFlownAway = true; const angle = Math.atan2(dy, dx); const pushForce = (forceRadius - distance) / forceRadius; this.vx += Math.cos(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vx * 0.25; this.vy += Math.sin(angle) * pushForce * 7 * (this.zFactor * 1.2) + mouse.vy * 0.25; }
         }
         if (this.isFlownAway) { this.vx *= 0.94; this.vy *= 0.94; this.opacity -= 0.015; }
@@ -203,8 +176,8 @@ function initBirthdayFlowerCurtain() {
 }
 
 function buildTwinklingStarsEnvironment() {
-    const starField = document.getElementById('dynamic-stars-layer'); if (!starField) return; starField.innerHTML = ''; const starCount = Math.floor((window.innerWidth * window.innerHeight) / 6000);
-    for(let i=0; i<starCount; i++) { const star = document.createElement('div'); star.classList.add('custom-star'); const diameter = Math.random() * 2.5 + 1; star.style.width = `${diameter}px`; star.style.height = `${diameter}px`; star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`; star.style.animationDelay = `${Math.random() * 5}s`; starField.appendChild(star); }
+    const starField = document.getElementById('dynamic-stars-layer'); if (!starField) return; starField.innerHTML = ''; const starCount = Math.floor((window.innerWidth * window.innerHeight) / 5000);
+    for(let i=0; i<starCount; i++) { const star = document.createElement('div'); star.classList.add('custom-star'); const diameter = Math.random() * 2.2 + 1; star.style.width = `${diameter}px`; star.style.height = `${diameter}px`; star.style.top = `${Math.random() * 100}%`; star.style.left = `${Math.random() * 100}%`; star.style.animationDelay = `${Math.random() * 4}s`; star.style.animationDuration = `${Math.random() * 3 + 2}s`; starField.appendChild(star); }
 }
 
 function animateLayers() {
@@ -232,6 +205,7 @@ function triggerFlowerStormTransition() {
 
 function clearActiveWordHighlights() { document.querySelectorAll('.interactive-word').forEach(w => w.classList.remove('active-touch')); }
 
+// Real-Time Mobile Interception Vector Matrix (Android Hover Pipeline Fix)
 function handleFingerSlideAction(e) {
     if (activePageContext === 2) return; const t = e.touches[0];
     const rect = fgCanvas.getBoundingClientRect();
@@ -250,6 +224,11 @@ function handleFingerSlideAction(e) {
         const txt = hitNode.innerText;
         if ((txt.includes('🤭') || txt.includes('😊')) && activePageContext === 5) switchAppScene(6);
     } 
+    else if (hitNode && hitNode.classList.contains('interactive-symbol')) {
+        const txt = hitNode.innerText;
+        if (txt.includes('❤️') && activePageContext === 3) switchAppScene(4);
+        else if (txt.includes('🥰') && activePageContext === 6) switchAppScene(7);
+    }
 }
 
 window.addEventListener('touchmove', handleFingerSlideAction, { passive: false });
@@ -264,8 +243,11 @@ function parseTextParagraphIntoSpans(paragraphId, terminalMatchKey = null) {
         
         if (word.includes('🤭') || word.includes('😊') || word.includes('😂')) {
             span.innerText = word; span.classList.add('interactive-emoji');
+            if (paragraphId === 'music-story') span.addEventListener('mouseenter', () => { if(activePageContext === 5) switchAppScene(6); });
         } else if (word.includes('❤️') || word.includes('🥰') || word.includes('🙏') || word.includes('🌟')) {
             span.innerText = word; span.classList.add('interactive-symbol'); 
+            if (word.includes('❤️')) span.addEventListener('mouseenter', () => { if(activePageContext === 3) switchAppScene(4); });
+            if (word.includes('🥰')) span.addEventListener('mouseenter', () => { if(activePageContext === 6) switchAppScene(7); });
         } else {
             span.classList.add('interactive-word');
             span.addEventListener('mouseenter', () => { if (pType !== 'intro' || currentGlobalClearance > 85) span.classList.add('active-touch'); });
