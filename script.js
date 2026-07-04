@@ -19,6 +19,7 @@ let isDrawingMode = false;
 let isDrawingStrokeActive = false; 
 
 let drawnHeartPoints = [];
+let lastViewportWidth = 0; // FIXED: Tracks horizontal scale to eliminate Android address-bar resize freezes
 
 // Gentle, Super-Slow 2D Bounding Box Floating Moon Engine
 let cosmicMoon = {
@@ -355,10 +356,23 @@ window.addEventListener('mouseup', handlePointerRelease); window.addEventListene
 function trackGlobalInput(e) { if(activePageContext === 2) return; const clientX = e.clientX || (e.touches && e.touches[0].clientX); const clientY = e.clientY || (e.touches && e.touches[0].clientY); if (!clientX || !clientY) return; const rect = fgCanvas.getBoundingClientRect(); mouse.x = clientX - rect.left; mouse.y = clientY - rect.top; mouse.active = true; }
 window.addEventListener('mousemove', trackGlobalInput);
 
-function resizeCanvases() { bgCanvas.width = fgCanvas.width = window.innerWidth; bgCanvas.height = fgCanvas.height = window.innerHeight; cosmicMoon.init(); buildTwinklingStarsEnvironment(); }
+// FIXED RESIZE ENGINE: Protects processing queues against mobile browser address bar visibility shifts
+function resizeCanvases() { 
+    if (window.innerWidth === lastViewportWidth) return; 
+    lastViewportWidth = window.innerWidth;
+    
+    bgCanvas.width = fgCanvas.width = window.innerWidth; 
+    bgCanvas.height = fgCanvas.height = window.innerHeight; 
+    cosmicMoon.init(); 
+    buildTwinklingStarsEnvironment(); 
+}
 window.addEventListener('resize', resizeCanvases);
 
 window.addEventListener('DOMContentLoaded', () => {
+    // FIXED SCROLL CONTENTION: Injects behavioral rules blocking native window swipe drag interruptions
+    if (fgCanvas) fgCanvas.style.touchAction = 'none';
+    if (bgCanvas) bgCanvas.style.touchAction = 'none';
+    
     resizeCanvases(); 
     switchAppScene(1); 
     animateLayers();
@@ -374,7 +388,6 @@ function unfreezeBackgroundAudio() {
     if (audioTrack && audioTrack.paused) {
         audioTrack.play()
             .then(() => {
-                // Successfully unlocked! Clean up all potential event references
                 window.removeEventListener('touchstart', unfreezeBackgroundAudio);
                 window.removeEventListener('touchmove', unfreezeBackgroundAudio);
                 window.removeEventListener('mousedown', unfreezeBackgroundAudio);
@@ -398,5 +411,4 @@ if (fgCanvas) {
     fgCanvas.addEventListener('touchmove', unfreezeBackgroundAudio, { passive: true });
 }
 
-// Exposed Function Anchor Target Matrix
 window.switchAppScene = switchAppScene;
