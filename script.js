@@ -349,7 +349,6 @@ function closeAlertAndReset(isWin) {
 }
 
 function resetDrawingTask() { drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height); setupDrawingCanvas(); }
-
 const handlePointerRelease = () => { if (activePageContext === 2 && isDrawingMode && isDrawingStrokeActive) { isDrawingStrokeActive = false; evaluateHeartShapeAccuracy(); } else { isDrawingStrokeActive = false; } };
 window.addEventListener('mouseup', handlePointerRelease); window.addEventListener('touchend', handlePointerRelease);
 
@@ -367,22 +366,37 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { const appViewport = document.getElementById('app-view-container'); if (appViewport) appViewport.classList.add('sky-initialized'); }, 100);
 });
 
-
 // ==========================================================================
-// BACKGROUND AUDIO UNFREEZER CORE LOGIC
+// FIXED: HIGH-PERFORMANCE ANDROID AUDIO UNFREEZER CORE LOGIC
 // ==========================================================================
 function unfreezeBackgroundAudio() {
     const audioTrack = document.getElementById('sargam-audio');
     if (audioTrack && audioTrack.paused) {
-        // Play audio safely within the user gesture execution context
-        audioTrack.play().catch(err => console.log("Unfreeze context bound safely to user gesture thread"));
-        
-        // Remove listeners immediately so we don't spam execution cycles
-        window.removeEventListener('touchstart', unfreezeBackgroundAudio);
-        window.removeEventListener('mousedown', unfreezeBackgroundAudio);
+        audioTrack.play()
+            .then(() => {
+                // Successfully unlocked! Clean up all potential event references
+                window.removeEventListener('touchstart', unfreezeBackgroundAudio);
+                window.removeEventListener('touchmove', unfreezeBackgroundAudio);
+                window.removeEventListener('mousedown', unfreezeBackgroundAudio);
+                if (fgCanvas) {
+                    fgCanvas.removeEventListener('touchstart', unfreezeBackgroundAudio);
+                    fgCanvas.removeEventListener('touchmove', unfreezeBackgroundAudio);
+                }
+            })
+            .catch(err => console.log("Android background audio interaction hook pending..."));
     }
 }
-window.addEventListener('touchstart', unfreezeBackgroundAudio);
+
+// Global window event interceptors
+window.addEventListener('touchstart', unfreezeBackgroundAudio, { passive: true });
+window.addEventListener('touchmove', unfreezeBackgroundAudio, { passive: true });
 window.addEventListener('mousedown', unfreezeBackgroundAudio);
 
+// Canvas-specific cross-origin event bubbles for mobile devices
+if (fgCanvas) {
+    fgCanvas.addEventListener('touchstart', unfreezeBackgroundAudio, { passive: true });
+    fgCanvas.addEventListener('touchmove', unfreezeBackgroundAudio, { passive: true });
+}
+
+// Exposed Function Anchor Target Matrix
 window.switchAppScene = switchAppScene;
